@@ -6,18 +6,19 @@
   <meta name="renderer" content="webkit">
   <meta http-equiv="X-UA-Compatible" content="IE=edge" >
   <link rel="dns-prefetch" href="106.14.169.113">
-  <title>Hello World | 谁没个年少轻狂</title>
+  <title>Android数据保存之SharedPreference | 谁没个年少轻狂</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta name="description" content="Welcome to Hexo! This is your very first post. Check documentation for more info. If you get any problems when using Hexo, you can find the answer in troubleshooting or you can ask me on GitHub. Quick">
+  <meta name="description" content="前言在天气预报这个项目中，几次遇到需要保存数据的地方。例如安装APP后首次启动时先进入几个连续的导航页面，还有再次进入APP时默认显示上一次查看的天气信息。这些需要保存的数据都是用SharedPreference来存储的，今天就来总结一下他的作用和用法 SharedPreference的作用程序中处理的大部分问题都与数据有关，读取数据显示在UI上，读取的数据可以是本地的，也可以是网络的。保存用户数">
+<meta name="keywords" content="Android">
 <meta property="og:type" content="article">
-<meta property="og:title" content="Hello World">
-<meta property="og:url" content="106.14.169.113/2017/08/27/hello-world/index.html">
+<meta property="og:title" content="Android数据保存之SharedPreference">
+<meta property="og:url" content="106.14.169.113/2017/09/09/Android数据保存之SharedPreference/index.html">
 <meta property="og:site_name" content="谁没个年少轻狂">
-<meta property="og:description" content="Welcome to Hexo! This is your very first post. Check documentation for more info. If you get any problems when using Hexo, you can find the answer in troubleshooting or you can ask me on GitHub. Quick">
-<meta property="og:updated_time" content="2017-09-06T13:00:08.338Z">
+<meta property="og:description" content="前言在天气预报这个项目中，几次遇到需要保存数据的地方。例如安装APP后首次启动时先进入几个连续的导航页面，还有再次进入APP时默认显示上一次查看的天气信息。这些需要保存的数据都是用SharedPreference来存储的，今天就来总结一下他的作用和用法 SharedPreference的作用程序中处理的大部分问题都与数据有关，读取数据显示在UI上，读取的数据可以是本地的，也可以是网络的。保存用户数">
+<meta property="og:updated_time" content="2017-09-09T03:17:00.604Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="Hello World">
-<meta name="twitter:description" content="Welcome to Hexo! This is your very first post. Check documentation for more info. If you get any problems when using Hexo, you can find the answer in troubleshooting or you can ask me on GitHub. Quick">
+<meta name="twitter:title" content="Android数据保存之SharedPreference">
+<meta name="twitter:description" content="前言在天气预报这个项目中，几次遇到需要保存数据的地方。例如安装APP后首次启动时先进入几个连续的导航页面，还有再次进入APP时默认显示上一次查看的天气信息。这些需要保存的数据都是用SharedPreference来存储的，今天就来总结一下他的作用和用法 SharedPreference的作用程序中处理的大部分问题都与数据有关，读取数据显示在UI上，读取的数据可以是本地的，也可以是网络的。保存用户数">
   
     <link rel="alternative" href="/atom.xml" title="谁没个年少轻狂" type="application/atom+xml">
   
@@ -149,36 +150,55 @@
             <canvas data-colors="#eaeaea" data-sectionHeight="100" data-contentId="js-content" id="myCanvas1" class="anm-canvas"></canvas>
           </div>
           <div id="js-content" class="content-ll">
-            <article id="post-hello-world" class="article article-type-post " itemscope itemprop="blogPost">
+            <article id="post-Android数据保存之SharedPreference" class="article article-type-post " itemscope itemprop="blogPost">
   <div class="article-inner">
     
       <header class="article-header">
         
   
     <h1 class="article-title" itemprop="name">
-      Hello World
+      Android数据保存之SharedPreference
     </h1>
   
 
         
-        <a href="/2017/08/27/hello-world/" class="archive-article-date">
-  	<time datetime="2017-08-27T12:07:07.548Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2017-08-27</time>
+        <a href="/2017/09/09/Android数据保存之SharedPreference/" class="archive-article-date">
+  	<time datetime="2017-09-09T01:55:42.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2017-09-09</time>
 </a>
         
       </header>
     
     <div class="article-entry" itemprop="articleBody">
       
-        <p>Welcome to <a href="https://hexo.io/" target="_blank" rel="external">Hexo</a>! This is your very first post. Check <a href="https://hexo.io/docs/" target="_blank" rel="external">documentation</a> for more info. If you get any problems when using Hexo, you can find the answer in <a href="https://hexo.io/docs/troubleshooting.html" target="_blank" rel="external">troubleshooting</a> or you can ask me on <a href="https://github.com/hexojs/hexo/issues" target="_blank" rel="external">GitHub</a>.</p>
-<h2 id="Quick-Start"><a href="#Quick-Start" class="headerlink" title="Quick Start"></a>Quick Start</h2><h3 id="Create-a-new-post"><a href="#Create-a-new-post" class="headerlink" title="Create a new post"></a>Create a new post</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">$ hexo new <span class="string">"My New Post"</span></div></pre></td></tr></table></figure>
-<p>More info: <a href="https://hexo.io/docs/writing.html" target="_blank" rel="external">Writing</a></p>
-<h3 id="Run-server"><a href="#Run-server" class="headerlink" title="Run server"></a>Run server</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">$ hexo server</div></pre></td></tr></table></figure>
+        <h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>在天气预报这个项目中，几次遇到需要保存数据的地方。例如安装APP后首次启动时先进入几个连续的导航页面，还有再次进入APP时默认显示上一次查看的天气信息。这些需要保存的数据都是用SharedPreference来存储的，今天就来总结一下他的作用和用法</p>
+<h2 id="SharedPreference的作用"><a href="#SharedPreference的作用" class="headerlink" title="SharedPreference的作用"></a>SharedPreference的作用</h2><p>程序中处理的大部分问题都与数据有关，读取数据显示在UI上，读取的数据可以是本地的，也可以是网络的。保存用户数据到存储空间，可以是本地的数据库，文件等，也可以是保存到网络服务器。总之大部分的程序都是在和数据打交道。Android中数据保存比较方便灵活，今天就按照官网说说数据保存。</p>
+<p>大多数Android应用程序都需要存储数据，在Android生命周期方法onPause中，你可以保存用户在程序中的进度数据，在用户再次进入程序时进行读取恢复。可能一些应用程序不需要保存用户的进度信息，但是用户对于应用程序的设置信息一定要保存。很多应用需要保存大量的数据到数据库或者文件里，比如看电视的应用，需要保存大量的频道信息。下面就总结一下在Android中数据是如何保存的。</p>
 <a id="more"></a>
-<p>More info: <a href="https://hexo.io/docs/server.html" target="_blank" rel="external">Server</a></p>
-<h3 id="Generate-static-files"><a href="#Generate-static-files" class="headerlink" title="Generate static files"></a>Generate static files</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">$ hexo generate</div></pre></td></tr></table></figure>
-<p>More info: <a href="https://hexo.io/docs/generating.html" target="_blank" rel="external">Generating</a></p>
-<h3 id="Deploy-to-remote-sites"><a href="#Deploy-to-remote-sites" class="headerlink" title="Deploy to remote sites"></a>Deploy to remote sites</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">$ hexo deploy</div></pre></td></tr></table></figure>
-<p>More info: <a href="https://hexo.io/docs/deployment.html" target="_blank" rel="external">Deployment</a></p>
+<h2 id="key-value键值集合保存数据"><a href="#key-value键值集合保存数据" class="headerlink" title="key-value键值集合保存数据"></a>key-value键值集合保存数据</h2><p>SharedPreferences通常用来保存一些相对较少的键值数据集。一个SharedPreferences对象指向了一个键值对形式保存数据的Shared Preference文件，它提供了一些很方便读取和写入数据的方法。每一个SharedPreferences文件都被Android framework管理，可以是只能创建它的应用程序访问，也可以分享给其他应用程序。怎么用SharedPreferences·保存数据呢？</p>
+<h2 id="获取SharedPreferences对象"><a href="#获取SharedPreferences对象" class="headerlink" title="获取SharedPreferences对象"></a>获取SharedPreferences对象</h2><p>你可以创建一个新的Shared Preference 共享文件，如果已经存在则直接返回指向该共享文件的SharedPreferences该对象，有两种方法可以完成这个工作：</p>
+<ul>
+<li><p>getSharedPreferences(String name, int mode)<br>此方通通过Context对象调用，返回一个唯一的SharedPreferences对象，这里的唯一指的是通过name来查找的唯一对应的SharedPreferences，如果没有查找到则会用name来创建一个。唯一的好处就是你在一个地方保存后在另外的地方立刻就能读取到这个值。用mode来区分创建的SharedPreferences对象共享类型，MODE_PRIVATE表示该应用程序私有，MODE_WORLD_READABLE和MODE_WORLD_WRITEABLE是表示全局读或写权限，MODE_MULTI_PROCESS表示可以跨进程访问。</p>
+</li>
+<li><p>getPreferences(int mode)<br>此方法被Activity对象调用，会创建一个只能被该Activity访问的SharedPreferences对象，该方法是封装的上面的那个方法，默认创建的SharedPreferences名字是该Activity的名字，所以不用传此参数，mode只有MODE_PRIVATE、MODE_WORLD_READABLE和MODE_WORLD_WRITEABLE三个可选，缺少MODE_MULTI_PROCESS，因为只有该Activity有权限访问，所以跨进程没什么用。</p>
+</li>
+</ul>
+<p>举个例子：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">Context context = getActivity();</div><div class="line">SharedPreferences sharedPref = context.getSharedPreferences(</div><div class="line">        getString(R.string.preference_file_key),Context.MODE_PRIVATE);</div></pre></td></tr></table></figure></p>
+<p>上面的代码是在一个Fragment中调用的，getActivity()是获取Fragment所在的Activity对象（Activity是继承自Context），R.string.preference_file_key是该SharedPreferences的名字，mode是Context.MODE_PRIVATE私有类型。</p>
+<p>注意：当你给SharedPreferences起名字的时候最好是复杂点的，这样就能保证不会有名字重复却属于不同应用程序的SharedPreferences，最好是以你的应用包名再加上其他构成，比如”com.example.myapp.PREFERENCE_FILE_KEY”。</p>
+<p>获取一个Activity的SharedPreferences代码如下：<br>SharedPreferences sharedPref = getActivity().getPreferences(Context.MODE_PRIVATE);<br>上面是创建了一个Activity私有的SharedPreferences对象。</p>
+<blockquote>
+<p>注意：当你创建SharedPreferences时mode值的是MODE_WORLD_PRIVATE或者MODE_WORLD_WRITEABLE，你创建的Shared Preferences文件是可以被其他应用程序访问的。这两种mode都是比较危险的，因为其他应用程序也能访问，所以会造成数据外泄。google给出的建议是尽量不要用这种机制来进行数据共享传递，可以用其他方法来代替这种机制，比如使用ContentProvider，BroadcastReceiver或者Service。</p>
+</blockquote>
+<h2 id="写入数据到SharedPreferences文件"><a href="#写入数据到SharedPreferences文件" class="headerlink" title="写入数据到SharedPreferences文件"></a>写入数据到SharedPreferences文件</h2><p>写入数据到Shared Preferences是通过获取SharedPreferences.Editor对象，调用该对象的一些putXX(key,value)方法来写入key对应的值，然后调用commit()方法提交写入完成的，代码如下：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">SharedPreferences sharedPref = getActivity().getPreferences(Context.MODE_PRIVATE);</div><div class="line">SharedPreferences.Editor editor = sharedPref.edit();</div><div class="line">editor.putInt(getString(R.string.saved_high_score), newHighScore);</div><div class="line">editor.commit();</div></pre></td></tr></table></figure>
+<p>SharedPreferences.Editor对象的putXX(String key，数据类型)方法可以保存boolean、int、float、long、String和Set<string>类型的数据，但是put方法只是建立好键值对的数据联系，并没有保存，直到你调用commit()或者apply()方法。调用remove(String key)可以清除key对应的数据(还需要调用commit方法提交操作)，你也可以调用clear()方法把所有数据清除掉。</string></p>
+<blockquote>
+<p>注意：commit()和apply()都是提交对数据的操作，但是它们还是有些区别的：<br>1、commit方法有返回值，返回值是一个boolean变量，表示你的保存动作是否成功，apply是没有返回值的，所以如果你不需要返回值，也不关心提交是否成功可以用apply来代替commit；<br>2、apply是先把数据更改提交到内存，然后再异步保存到磁盘上，而commit这两个操作是同步的，所以在进行频繁提交数据更改时apply更为高效；</p>
+</blockquote>
+<p>SharedPreferences的getXX(String key, defValue)方法key就是之前调用SharedPreferences.Editor的put(String key,数据类型)方法时的key，defValue是在找不到对应的key的数据时返回的默认数据。</p>
+<h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><h3 id="保存数据分四步："><a href="#保存数据分四步：" class="headerlink" title="保存数据分四步："></a>保存数据分四步：</h3><p>1、获取SharedPreferences对象；<br>2、获取SharedPreferences.Editor对象；<br>3、调用put方法添加数据；<br>4、调用commit保存数据；  </p>
+<h3 id="获取数据很简单，分两步："><a href="#获取数据很简单，分两步：" class="headerlink" title="获取数据很简单，分两步："></a>获取数据很简单，分两步：</h3><p>1、获取SharedPreferences对象；<br>2、调用get方法获取key对应的值；</p>
+<p>转载至：<a href="http://www.cnblogs.com/2010wuhao/p/4670767.html" target="_blank" rel="external">wuhao_blog的博客园</a></p>
 
       
 
@@ -187,6 +207,17 @@
     <div class="article-info article-info-index">
       
       
+	<div class="article-tag tagcloud">
+		<i class="icon-price-tags icon"></i>
+		<ul class="article-tag-list">
+			 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color3">Android</a>
+        		</li>
+      		
+		</ul>
+	</div>
+
       
 
       
@@ -237,7 +268,7 @@
     <a class="close js-modal-close" href="javascript:;"><i class="icon icon-close"></i></a>
     <p>扫一扫，分享到微信</p>
     <div class="wx-qrcode">
-      <img src="http://s.jiathis.com/qrcode.php?url=http:106.14.169.113/2017/08/27/hello-world/" alt="微信分享二维码">
+      <img src="http://s.jiathis.com/qrcode.php?url=http:106.14.169.113/2017/09/09/Android数据保存之SharedPreference/" alt="微信分享二维码">
     </div>
 </div>
 
@@ -251,15 +282,20 @@
   
 <nav id="article-nav">
   
-    <a href="/2017/08/27/first-blog/" id="article-nav-newer" class="article-nav-link-wrap">
+    <a href="/2017/09/10/Handler的运行机制/" id="article-nav-newer" class="article-nav-link-wrap">
       <i class="icon-circle-left"></i>
       <div class="article-nav-title">
         
-          First Blog
+          Handler的运行机制
         
       </div>
     </a>
   
+  
+    <a href="/2017/09/06/Android-ListView数据内容不显示/" id="article-nav-older" class="article-nav-link-wrap">
+      <div class="article-nav-title">Android ListView数据内容不显示</div>
+      <i class="icon-circle-right"></i>
+    </a>
   
 </nav>
 
@@ -288,8 +324,8 @@
   <div id="cloud-tie-wrapper" class="cloud-tie-wrapper"></div>
 <script>
   var cloudTieConfig = {
-    url: "106.14.169.113/2017/08/27/hello-world/", 
-    sourceId: "hello-world",
+    url: "106.14.169.113/2017/09/09/Android数据保存之SharedPreference/", 
+    sourceId: "Android数据保存之SharedPreference",
     productKey: "true",
     target: "cloud-tie-wrapper"
   };

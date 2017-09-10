@@ -6,18 +6,26 @@
   <meta name="renderer" content="webkit">
   <meta http-equiv="X-UA-Compatible" content="IE=edge" >
   <link rel="dns-prefetch" href="106.14.169.113">
-  <title>Hello World | 谁没个年少轻狂</title>
+  <title>Android ListView数据内容不显示 | 谁没个年少轻狂</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta name="description" content="Welcome to Hexo! This is your very first post. Check documentation for more info. If you get any problems when using Hexo, you can find the answer in troubleshooting or you can ask me on GitHub. Quick">
+  <meta name="description" content="遇到的问题在城市列表布局文件里，添加了一个ListView组件，并在相应的Activity文件中添加了适配器，数据是从一个数据库文件city.db中获取城市名称cityName，保存到mArrayList变量中，然后显示到ListView列表中。代码截图如下">
+<meta name="keywords" content="Android,踩坑日志">
 <meta property="og:type" content="article">
-<meta property="og:title" content="Hello World">
-<meta property="og:url" content="106.14.169.113/2017/08/27/hello-world/index.html">
+<meta property="og:title" content="Android ListView数据内容不显示">
+<meta property="og:url" content="106.14.169.113/2017/09/06/Android-ListView数据内容不显示/index.html">
 <meta property="og:site_name" content="谁没个年少轻狂">
-<meta property="og:description" content="Welcome to Hexo! This is your very first post. Check documentation for more info. If you get any problems when using Hexo, you can find the answer in troubleshooting or you can ask me on GitHub. Quick">
-<meta property="og:updated_time" content="2017-09-06T13:00:08.338Z">
+<meta property="og:description" content="遇到的问题在城市列表布局文件里，添加了一个ListView组件，并在相应的Activity文件中添加了适配器，数据是从一个数据库文件city.db中获取城市名称cityName，保存到mArrayList变量中，然后显示到ListView列表中。代码截图如下">
+<meta property="og:image" content="/img/ListView.png">
+<meta property="og:image" content="/img/adapter.png">
+<meta property="og:image" content="/img/结果.png">
+<meta property="og:image" content="/img/数组.png">
+<meta property="og:image" content="/img/entries.png">
+<meta property="og:image" content="/img/array.png">
+<meta property="og:updated_time" content="2017-09-10T01:48:26.532Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="Hello World">
-<meta name="twitter:description" content="Welcome to Hexo! This is your very first post. Check documentation for more info. If you get any problems when using Hexo, you can find the answer in troubleshooting or you can ask me on GitHub. Quick">
+<meta name="twitter:title" content="Android ListView数据内容不显示">
+<meta name="twitter:description" content="遇到的问题在城市列表布局文件里，添加了一个ListView组件，并在相应的Activity文件中添加了适配器，数据是从一个数据库文件city.db中获取城市名称cityName，保存到mArrayList变量中，然后显示到ListView列表中。代码截图如下">
+<meta name="twitter:image" content="/img/ListView.png">
   
     <link rel="alternative" href="/atom.xml" title="谁没个年少轻狂" type="application/atom+xml">
   
@@ -149,36 +157,31 @@
             <canvas data-colors="#eaeaea" data-sectionHeight="100" data-contentId="js-content" id="myCanvas1" class="anm-canvas"></canvas>
           </div>
           <div id="js-content" class="content-ll">
-            <article id="post-hello-world" class="article article-type-post " itemscope itemprop="blogPost">
+            <article id="post-Android-ListView数据内容不显示" class="article article-type-post " itemscope itemprop="blogPost">
   <div class="article-inner">
     
       <header class="article-header">
         
   
     <h1 class="article-title" itemprop="name">
-      Hello World
+      Android ListView数据内容不显示
     </h1>
   
 
         
-        <a href="/2017/08/27/hello-world/" class="archive-article-date">
-  	<time datetime="2017-08-27T12:07:07.548Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2017-08-27</time>
+        <a href="/2017/09/06/Android-ListView数据内容不显示/" class="archive-article-date">
+  	<time datetime="2017-09-06T06:33:41.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2017-09-06</time>
 </a>
         
       </header>
     
     <div class="article-entry" itemprop="articleBody">
       
-        <p>Welcome to <a href="https://hexo.io/" target="_blank" rel="external">Hexo</a>! This is your very first post. Check <a href="https://hexo.io/docs/" target="_blank" rel="external">documentation</a> for more info. If you get any problems when using Hexo, you can find the answer in <a href="https://hexo.io/docs/troubleshooting.html" target="_blank" rel="external">troubleshooting</a> or you can ask me on <a href="https://github.com/hexojs/hexo/issues" target="_blank" rel="external">GitHub</a>.</p>
-<h2 id="Quick-Start"><a href="#Quick-Start" class="headerlink" title="Quick Start"></a>Quick Start</h2><h3 id="Create-a-new-post"><a href="#Create-a-new-post" class="headerlink" title="Create a new post"></a>Create a new post</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">$ hexo new <span class="string">"My New Post"</span></div></pre></td></tr></table></figure>
-<p>More info: <a href="https://hexo.io/docs/writing.html" target="_blank" rel="external">Writing</a></p>
-<h3 id="Run-server"><a href="#Run-server" class="headerlink" title="Run server"></a>Run server</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">$ hexo server</div></pre></td></tr></table></figure>
-<a id="more"></a>
-<p>More info: <a href="https://hexo.io/docs/server.html" target="_blank" rel="external">Server</a></p>
-<h3 id="Generate-static-files"><a href="#Generate-static-files" class="headerlink" title="Generate static files"></a>Generate static files</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">$ hexo generate</div></pre></td></tr></table></figure>
-<p>More info: <a href="https://hexo.io/docs/generating.html" target="_blank" rel="external">Generating</a></p>
-<h3 id="Deploy-to-remote-sites"><a href="#Deploy-to-remote-sites" class="headerlink" title="Deploy to remote sites"></a>Deploy to remote sites</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">$ hexo deploy</div></pre></td></tr></table></figure>
-<p>More info: <a href="https://hexo.io/docs/deployment.html" target="_blank" rel="external">Deployment</a></p>
+        <h2 id="遇到的问题"><a href="#遇到的问题" class="headerlink" title="遇到的问题"></a>遇到的问题</h2><p>在城市列表布局文件里，添加了一个ListView组件，并在相应的Activity文件中添加了适配器，数据是从一个数据库文件city.db中获取城市名称cityName，保存到mArrayList变量中，然后显示到ListView列表中。代码截图如下<br><img src="/img/ListView.png" alt="ListView"><br><a id="more"></a><br><img src="/img/adapter.png" alt="adapter"><br>预期的结果应该是在城市列表界面显示出列表，然而，结果是这样的：<br><img src="/img/结果.png" alt="结果"><br>什么都没有！！</p>
+<h2 id="解决过程"><a href="#解决过程" class="headerlink" title="解决过程"></a>解决过程</h2><h3 id="检查代码"><a href="#检查代码" class="headerlink" title="检查代码"></a>检查代码</h3><p>我真的是掘地三尺的检查代码，然而真的没有发现什么问题，对照教程上的代码，也没有发现什么不同的地方。好吧，似乎此路不通，换个方法</p>
+<h3 id="固定数组"><a href="#固定数组" class="headerlink" title="固定数组"></a>固定数组</h3><p>既然数据库文件读取的数据无法显示，那么给你个自定义的数组呢？于是定义了一个data数组，适配到LIstView上：<br><img src="/img/数组.png" alt="数组"><br>继续无效！！（垂头丧气）</p>
+<h3 id="通过数组资源设置列表项"><a href="#通过数组资源设置列表项" class="headerlink" title="通过数组资源设置列表项"></a>通过数组资源设置列表项</h3><p>不想说太多，直接上图吧：<br><img src="/img/entries.png" alt="entries"><br><img src="/img/array.png" alt="array"><br>仍然无效！表示很绝望！</p>
+<h2 id="结果和解决办法"><a href="#结果和解决办法" class="headerlink" title="结果和解决办法"></a>结果和解决办法</h2><p>折腾了一两个小时，当我知道结果的时候，我的内心是崩溃的。出现这个现象的原因不是列表内容没有显示出来，而是列表选项字体的颜色和列表背景颜色都是白色，所以看不到列表选项。办法是在layout目录下新建一个字体颜色不同的样式文件(list_item.xml)替换掉适配器里面的列表外观样式(simple_list_item_1)</p>
 
       
 
@@ -187,6 +190,21 @@
     <div class="article-info article-info-index">
       
       
+	<div class="article-tag tagcloud">
+		<i class="icon-price-tags icon"></i>
+		<ul class="article-tag-list">
+			 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color3">Android</a>
+        		</li>
+      		 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color5">踩坑日志</a>
+        		</li>
+      		
+		</ul>
+	</div>
+
       
 
       
@@ -237,7 +255,7 @@
     <a class="close js-modal-close" href="javascript:;"><i class="icon icon-close"></i></a>
     <p>扫一扫，分享到微信</p>
     <div class="wx-qrcode">
-      <img src="http://s.jiathis.com/qrcode.php?url=http:106.14.169.113/2017/08/27/hello-world/" alt="微信分享二维码">
+      <img src="http://s.jiathis.com/qrcode.php?url=http:106.14.169.113/2017/09/06/Android-ListView数据内容不显示/" alt="微信分享二维码">
     </div>
 </div>
 
@@ -251,15 +269,20 @@
   
 <nav id="article-nav">
   
-    <a href="/2017/08/27/first-blog/" id="article-nav-newer" class="article-nav-link-wrap">
+    <a href="/2017/09/09/Android数据保存之SharedPreference/" id="article-nav-newer" class="article-nav-link-wrap">
       <i class="icon-circle-left"></i>
       <div class="article-nav-title">
         
-          First Blog
+          Android数据保存之SharedPreference
         
       </div>
     </a>
   
+  
+    <a href="/2017/09/05/创建Android项目：天气预报/" id="article-nav-older" class="article-nav-link-wrap">
+      <div class="article-nav-title">创建Android项目：天气预报</div>
+      <i class="icon-circle-right"></i>
+    </a>
   
 </nav>
 
@@ -288,8 +311,8 @@
   <div id="cloud-tie-wrapper" class="cloud-tie-wrapper"></div>
 <script>
   var cloudTieConfig = {
-    url: "106.14.169.113/2017/08/27/hello-world/", 
-    sourceId: "hello-world",
+    url: "106.14.169.113/2017/09/06/Android-ListView数据内容不显示/", 
+    sourceId: "Android-ListView数据内容不显示",
     productKey: "true",
     target: "cloud-tie-wrapper"
   };

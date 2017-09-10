@@ -4,9 +4,9 @@
   
   <link href="/atom.xml" rel="self"/>
   
-  <link href="http://yoursite.com/"/>
-  <updated>2017-08-31T06:00:55.762Z</updated>
-  <id>http://yoursite.com/</id>
+  <link href="106.14.169.113/"/>
+  <updated>2017-09-10T01:51:34.767Z</updated>
+  <id>106.14.169.113/</id>
   
   <author>
     <name>Soldier</name>
@@ -16,36 +16,183 @@
   <generator uri="http://hexo.io/">Hexo</generator>
   
   <entry>
-    <title>First Blog</title>
-    <link href="http://yoursite.com/2017/08/27/first-blog/"/>
-    <id>http://yoursite.com/2017/08/27/first-blog/</id>
-    <published>2017-08-27T12:37:07.000Z</published>
-    <updated>2017-08-31T06:00:55.762Z</updated>
+    <title>Handler的运行机制</title>
+    <link href="106.14.169.113/2017/09/10/Handler%E7%9A%84%E8%BF%90%E8%A1%8C%E6%9C%BA%E5%88%B6/"/>
+    <id>106.14.169.113/2017/09/10/Handler的运行机制/</id>
+    <published>2017-09-10T01:04:01.000Z</published>
+    <updated>2017-09-10T01:51:34.767Z</updated>
     
-    <content type="html"><![CDATA[<h1 id="第一篇-试水"><a href="#第一篇-试水" class="headerlink" title="第一篇 试水"></a>第一篇 试水</h1><p>你好 这是我的第一篇文章:)</p>
+    <content type="html"><![CDATA[<h2 id="Handler的作用"><a href="#Handler的作用" class="headerlink" title="Handler的作用"></a>Handler的作用</h2><p>当我们需要在子线程处理耗时的操作（例如访问网络，数据库的操作），而当耗时的操作完成后，需要更新UI，这就需要使用Handler来处理，因为子线程不能做更新UI的操作。Handler能帮我们很容易的把任务（在子线程处理）切换回它所在的线程。<br>简单理解，Handler就是解决线程和线程之间的通信的。主要接受子线程发送的数据， 并用此数据配合主线程更新UI。<br>由于Handler运行在主线程中(UI线程中)，  它与子线程可以通过Message对象来传递数据， 这个时候，Handler就承担着接受子线程传过来的(子线程用sedMessage()方法传弟)Message对象，(里面包含数据)  ， 把这些消息放入主线程队列中，配合主线程进行更新UI。</p>
+<h2 id="Handler的特点"><a href="#Handler的特点" class="headerlink" title="Handler的特点"></a>Handler的特点</h2><p>handler可以分发Message对象和Runnable对象到主线程中， 每个Handler实例，都会绑定到创建他的线程中(一般是位于主线程)，它有两个作用：<br>(1)安排消息或Runnable 在某个主线程中某个地方执行；<br>(2)安排一个动作在不同的线程中执行。<br><a id="more"></a><br>Handler中分发消息的一些方法  </p>
+<blockquote>
+<p>post(Runnable)<br>postAtTime(Runnable，long)//在设定时间post<br>postDelayed(Runnable long)//延迟设定时间再post<br>sendEmptyMessage(int)<br>sendMessage(Message)<br>sendMessageAtTime(Message，long)<br>sendMessageDelayed(Message，long)  </p>
+</blockquote>
+<p>以上post类方法允许你排列一个Runnable对象到主线程队列中，<br>sendMessage类方法， 允许你安排一个带数据的Message对象到队列中，等待更新。</p>
+<h2 id="Handler的使用"><a href="#Handler的使用" class="headerlink" title="Handler的使用"></a>Handler的使用</h2><p>使用的handler的两种形式：  </p>
+<ul>
+<li>在主线程使用handler；   </li>
+<li>在子线程使用handler。  </li>
+</ul>
+<h3 id="在主线程使用handler的示例："><a href="#在主线程使用handler的示例：" class="headerlink" title="在主线程使用handler的示例："></a>在主线程使用handler的示例：</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div></pre></td><td class="code"><pre><div class="line">public class TestHandlerActivity extends AppCompatActivity &#123;</div><div class="line"></div><div class="line">       private static final String TAG = &quot;TestHandlerActivity&quot;;</div><div class="line"></div><div class="line">       private Handler mHandler = new Handler()&#123;</div><div class="line">           @Override</div><div class="line">           public void handleMessage(Message msg) &#123;</div><div class="line">               super.handleMessage(msg);</div><div class="line">               //获得刚才发送的Message对象，然后在这里进行UI操作</div><div class="line">               Log.e(TAG,&quot;------------&gt; msg.what = &quot; + msg.what);</div><div class="line">           &#125;</div><div class="line">       &#125;;</div><div class="line"></div><div class="line">       @Override</div><div class="line">       protected void onCreate(Bundle savedInstanceState) &#123;</div><div class="line">           super.onCreate(savedInstanceState);</div><div class="line">           setContentView(R.layout.activity_handler_test);</div><div class="line">           initData();</div><div class="line">       &#125;</div><div class="line"></div><div class="line">       private void initData() &#123;</div><div class="line"></div><div class="line">           //开启一个线程模拟处理耗时的操作</div><div class="line">           new Thread(new Runnable() &#123;</div><div class="line">               @Override</div><div class="line">               public void run() &#123;</div><div class="line">                   SystemClock.sleep(2000);</div><div class="line">                   //通过Handler发送一个消息切换回主线程（mHandler所在的线程）</div><div class="line">                   mHandler.sendEmptyMessage(0);</div><div class="line">               &#125;</div><div class="line">           &#125;).start();</div><div class="line">       &#125;</div></pre></td></tr></table></figure>
+<p><img src="/img/Handler主线程.png" alt="Handler主线程"><br>在主线程使用handler，只需在主线程创建一个handler对象，在子线程通过在主线程创建的handler对象发送Message，在handleMessage（）方法中接受这个Message对象进行处理。通过handler很容易的从子线程切换回主线程了。</p>
+<h3 id="在子线程中使用Handler："><a href="#在子线程中使用Handler：" class="headerlink" title="在子线程中使用Handler："></a>在子线程中使用Handler：</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div></pre></td><td class="code"><pre><div class="line">public class TestHandlerActivity extends AppCompatActivity &#123;</div><div class="line"></div><div class="line">        private static final String TAG = &quot;TestHandlerActivity&quot;;</div><div class="line"></div><div class="line">        //主线程的Handler</div><div class="line">        private Handler mHandler = new Handler()&#123;</div><div class="line">            @Override</div><div class="line">            public void handleMessage(Message msg) &#123;</div><div class="line">                super.handleMessage(msg);</div><div class="line">                //获得刚才发送的Message对象，然后在这里进行UI操作</div><div class="line">                Log.e(TAG,&quot;------------&gt; msg.what = &quot; + msg.what);</div><div class="line">            &#125;</div><div class="line">        &#125;;</div><div class="line">        //子线程中的Handler</div><div class="line">        private Handler mHandlerThread = null;</div><div class="line"></div><div class="line">        @Override</div><div class="line">        protected void onCreate(Bundle savedInstanceState) &#123;</div><div class="line">            super.onCreate(savedInstanceState);</div><div class="line">            setContentView(R.layout.activity_handler_test);</div><div class="line">            initData();</div><div class="line">        &#125;</div><div class="line"></div><div class="line">        private void initData() &#123;</div><div class="line"></div><div class="line">            //开启一个线程模拟处理耗时的操作</div><div class="line">            new Thread(new Runnable() &#123;</div><div class="line">                @Override</div><div class="line">                public void run() &#123;</div><div class="line"></div><div class="line">                    SystemClock.sleep(2000);</div><div class="line">                    //通过Handler发送一个消息切换回主线程（mHandler所在的线程）</div><div class="line">                    mHandler.sendEmptyMessage(0);</div><div class="line"></div><div class="line">                    //调用Looper.prepare（）方法</div><div class="line">                    Looper.prepare();</div><div class="line"></div><div class="line">                    mHandlerThread = new Handler()&#123;</div><div class="line">                        @Override</div><div class="line">                        public void handleMessage(Message msg) &#123;</div><div class="line">                            super.handleMessage(msg);</div><div class="line">                            Log.e(&quot;sub thread&quot;,&quot;---------&gt; msg.what = &quot; + msg.what);</div><div class="line">                        &#125;</div><div class="line">                    &#125;;</div><div class="line"></div><div class="line">                    mHandlerThread.sendEmptyMessage(1);</div><div class="line"></div><div class="line">                    //调用Looper.loop（）方法</div><div class="line">                    Looper.loop();</div><div class="line">                &#125;</div><div class="line">            &#125;).start();</div><div class="line"></div><div class="line">        &#125;</div></pre></td></tr></table></figure>
+<p><img src="/img/Handler子线程.png" alt="Handler子线程">  </p>
+<h3 id="Handler实例"><a href="#Handler实例" class="headerlink" title="Handler实例"></a>Handler实例</h3><p>子类需要继承Hendler类，并重写handleMessage(Message msg) 方法， 用于接受线程数据。<br>以下为一个实例，它实现的功能为：通过线程修改界面Button的内容<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div><div class="line">54</div><div class="line">55</div><div class="line">56</div><div class="line">57</div><div class="line">58</div><div class="line">59</div><div class="line">60</div><div class="line">61</div><div class="line">62</div><div class="line">63</div><div class="line">64</div><div class="line">65</div><div class="line">66</div><div class="line">67</div><div class="line">68</div><div class="line">69</div><div class="line">70</div><div class="line">71</div><div class="line">72</div><div class="line">73</div><div class="line">74</div><div class="line">75</div><div class="line">76</div><div class="line">77</div></pre></td><td class="code"><pre><div class="line">public class MyHandlerActivity extends Activity &#123; </div><div class="line">    Button button; </div><div class="line">    MyHandler myHandler; </div><div class="line"> </div><div class="line">    protected void onCreate(Bundle savedInstanceState) &#123; </div><div class="line">        super.onCreate(savedInstanceState); </div><div class="line">        setContentView(R.layout.handlertest); </div><div class="line"> </div><div class="line">        button = (Button) findViewById(R.id.button); </div><div class="line">        myHandler = new MyHandler(); </div><div class="line">        // 当创建一个新的Handler实例时， 它会绑定到当前线程和消息的队列中，开始分发数据 </div><div class="line">        // Handler有两个作用， (1) : 定时执行Message和Runnalbe 对象 </div><div class="line">        // (2): 让一个动作，在不同的线程中执行。 </div><div class="line"> </div><div class="line">        // 它安排消息，用以下方法 </div><div class="line">        // post(Runnable) </div><div class="line">        // postAtTime(Runnable，long) </div><div class="line">        // postDelayed(Runnable，long) </div><div class="line">        // sendEmptyMessage(int) </div><div class="line">        // sendMessage(Message); </div><div class="line">        // sendMessageAtTime(Message，long) </div><div class="line">        // sendMessageDelayed(Message，long) </div><div class="line">      </div><div class="line">        // 以上方法以 post开头的允许你处理Runnable对象 </div><div class="line">        //sendMessage()允许你处理Message对象(Message里可以包含数据，) </div><div class="line"> </div><div class="line">        MyThread m = new MyThread(); </div><div class="line">        new Thread(m).start(); </div><div class="line">    &#125; </div><div class="line"> </div><div class="line">    /** </div><div class="line">    * 接受消息，处理消息 ，此Handler会与当前主线程一块运行 </div><div class="line">    * */ </div><div class="line"> </div><div class="line">    class MyHandler extends Handler &#123; </div><div class="line">        public MyHandler() &#123; </div><div class="line">        &#125; </div><div class="line"> </div><div class="line">        public MyHandler(Looper L) &#123; </div><div class="line">            super(L); </div><div class="line">        &#125; </div><div class="line"> </div><div class="line">        // 子类必须重写此方法，接受数据 </div><div class="line">        @Override </div><div class="line">        public void handleMessage(Message msg) &#123; </div><div class="line">            // TODO Auto-generated method stub </div><div class="line">            Log.d(&quot;MyHandler&quot;， &quot;handleMessage.......&quot;); </div><div class="line">            super.handleMessage(msg); </div><div class="line">            // 此处可以更新UI </div><div class="line">            Bundle b = msg.getData(); </div><div class="line">            String color = b.getString(&quot;color&quot;); </div><div class="line">            MyHandlerActivity.this.button.append(color); </div><div class="line"> </div><div class="line">        &#125; </div><div class="line">    &#125; </div><div class="line"> </div><div class="line">    class MyThread implements Runnable &#123; </div><div class="line">        public void run() &#123; </div><div class="line"> </div><div class="line">            try &#123; </div><div class="line">                Thread。sleep(10000); </div><div class="line">            &#125; catch (InterruptedException e) &#123; </div><div class="line">                // TODO Auto-generated catch block </div><div class="line">                e.printStackTrace(); </div><div class="line">            &#125; </div><div class="line"> </div><div class="line">            Log.d(&quot;thread.......&quot;， &quot;mThread........&quot;); </div><div class="line">            Message msg = new Message(); </div><div class="line">            Bundle b = new Bundle();// 存放数据 </div><div class="line">            b.putString(&quot;color&quot;， &quot;我的&quot;); </div><div class="line">            msg.setData(b); </div><div class="line"> </div><div class="line">            MyHandlerActivity.this.myHandler.sendMessage(msg); // 向Handler发送消息，更新UI </div><div class="line"> </div><div class="line">        &#125; </div><div class="line">    &#125; </div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<h2 id="在主线程使用Handler的过程"><a href="#在主线程使用Handler的过程" class="headerlink" title="在主线程使用Handler的过程"></a>在主线程使用Handler的过程</h2><p>首先在主线程创建一个Handler对象 ，并重写handleMessage（）方法。然后当在子线程中需要进行更新UI的操作，我们就创建一个Message对象，并通过handler发送这条消息出去。之后这条消息被加入到MessageQueue队列中等待被处理，通过Looper对象会一直尝试从Message Queue中取出待处理的消息，最后分发会Handler的handler Message（）方法中。<br><img src="/img/主线程使用Handler过程.png" alt="主线程使用Handler过程"><br>参考文章：<a href="http://blog.csdn.net/u012827296/article/details/51236614" target="_blank" rel="external">Handler的运行机制</a> , <a href="http://mobile.51cto.com/aprogram-442833.htm" target="_blank" rel="external">Android开发中Handler的经典总结</a></p>
 ]]></content>
     
     <summary type="html">
     
-      &lt;h1 id=&quot;第一篇-试水&quot;&gt;&lt;a href=&quot;#第一篇-试水&quot; class=&quot;headerlink&quot; title=&quot;第一篇 试水&quot;&gt;&lt;/a&gt;第一篇 试水&lt;/h1&gt;&lt;p&gt;你好 这是我的第一篇文章:)&lt;/p&gt;
+      &lt;h2 id=&quot;Handler的作用&quot;&gt;&lt;a href=&quot;#Handler的作用&quot; class=&quot;headerlink&quot; title=&quot;Handler的作用&quot;&gt;&lt;/a&gt;Handler的作用&lt;/h2&gt;&lt;p&gt;当我们需要在子线程处理耗时的操作（例如访问网络，数据库的操作），而当耗时的操作完成后，需要更新UI，这就需要使用Handler来处理，因为子线程不能做更新UI的操作。Handler能帮我们很容易的把任务（在子线程处理）切换回它所在的线程。&lt;br&gt;简单理解，Handler就是解决线程和线程之间的通信的。主要接受子线程发送的数据， 并用此数据配合主线程更新UI。&lt;br&gt;由于Handler运行在主线程中(UI线程中)，  它与子线程可以通过Message对象来传递数据， 这个时候，Handler就承担着接受子线程传过来的(子线程用sedMessage()方法传弟)Message对象，(里面包含数据)  ， 把这些消息放入主线程队列中，配合主线程进行更新UI。&lt;/p&gt;
+&lt;h2 id=&quot;Handler的特点&quot;&gt;&lt;a href=&quot;#Handler的特点&quot; class=&quot;headerlink&quot; title=&quot;Handler的特点&quot;&gt;&lt;/a&gt;Handler的特点&lt;/h2&gt;&lt;p&gt;handler可以分发Message对象和Runnable对象到主线程中， 每个Handler实例，都会绑定到创建他的线程中(一般是位于主线程)，它有两个作用：&lt;br&gt;(1)安排消息或Runnable 在某个主线程中某个地方执行；&lt;br&gt;(2)安排一个动作在不同的线程中执行。&lt;br&gt;&lt;/p&gt;
+    
+    </summary>
+    
+    
+      <category term="Android" scheme="106.14.169.113/tags/Android/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>Android数据保存之SharedPreference</title>
+    <link href="106.14.169.113/2017/09/09/Android%E6%95%B0%E6%8D%AE%E4%BF%9D%E5%AD%98%E4%B9%8BSharedPreference/"/>
+    <id>106.14.169.113/2017/09/09/Android数据保存之SharedPreference/</id>
+    <published>2017-09-09T01:55:42.000Z</published>
+    <updated>2017-09-09T03:17:00.604Z</updated>
+    
+    <content type="html"><![CDATA[<h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>在天气预报这个项目中，几次遇到需要保存数据的地方。例如安装APP后首次启动时先进入几个连续的导航页面，还有再次进入APP时默认显示上一次查看的天气信息。这些需要保存的数据都是用SharedPreference来存储的，今天就来总结一下他的作用和用法</p>
+<h2 id="SharedPreference的作用"><a href="#SharedPreference的作用" class="headerlink" title="SharedPreference的作用"></a>SharedPreference的作用</h2><p>程序中处理的大部分问题都与数据有关，读取数据显示在UI上，读取的数据可以是本地的，也可以是网络的。保存用户数据到存储空间，可以是本地的数据库，文件等，也可以是保存到网络服务器。总之大部分的程序都是在和数据打交道。Android中数据保存比较方便灵活，今天就按照官网说说数据保存。</p>
+<p>大多数Android应用程序都需要存储数据，在Android生命周期方法onPause中，你可以保存用户在程序中的进度数据，在用户再次进入程序时进行读取恢复。可能一些应用程序不需要保存用户的进度信息，但是用户对于应用程序的设置信息一定要保存。很多应用需要保存大量的数据到数据库或者文件里，比如看电视的应用，需要保存大量的频道信息。下面就总结一下在Android中数据是如何保存的。</p>
+<a id="more"></a>
+<h2 id="key-value键值集合保存数据"><a href="#key-value键值集合保存数据" class="headerlink" title="key-value键值集合保存数据"></a>key-value键值集合保存数据</h2><p>SharedPreferences通常用来保存一些相对较少的键值数据集。一个SharedPreferences对象指向了一个键值对形式保存数据的Shared Preference文件，它提供了一些很方便读取和写入数据的方法。每一个SharedPreferences文件都被Android framework管理，可以是只能创建它的应用程序访问，也可以分享给其他应用程序。怎么用SharedPreferences·保存数据呢？</p>
+<h2 id="获取SharedPreferences对象"><a href="#获取SharedPreferences对象" class="headerlink" title="获取SharedPreferences对象"></a>获取SharedPreferences对象</h2><p>你可以创建一个新的Shared Preference 共享文件，如果已经存在则直接返回指向该共享文件的SharedPreferences该对象，有两种方法可以完成这个工作：</p>
+<ul>
+<li><p>getSharedPreferences(String name, int mode)<br>此方通通过Context对象调用，返回一个唯一的SharedPreferences对象，这里的唯一指的是通过name来查找的唯一对应的SharedPreferences，如果没有查找到则会用name来创建一个。唯一的好处就是你在一个地方保存后在另外的地方立刻就能读取到这个值。用mode来区分创建的SharedPreferences对象共享类型，MODE_PRIVATE表示该应用程序私有，MODE_WORLD_READABLE和MODE_WORLD_WRITEABLE是表示全局读或写权限，MODE_MULTI_PROCESS表示可以跨进程访问。</p>
+</li>
+<li><p>getPreferences(int mode)<br>此方法被Activity对象调用，会创建一个只能被该Activity访问的SharedPreferences对象，该方法是封装的上面的那个方法，默认创建的SharedPreferences名字是该Activity的名字，所以不用传此参数，mode只有MODE_PRIVATE、MODE_WORLD_READABLE和MODE_WORLD_WRITEABLE三个可选，缺少MODE_MULTI_PROCESS，因为只有该Activity有权限访问，所以跨进程没什么用。</p>
+</li>
+</ul>
+<p>举个例子：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">Context context = getActivity();</div><div class="line">SharedPreferences sharedPref = context.getSharedPreferences(</div><div class="line">        getString(R.string.preference_file_key),Context.MODE_PRIVATE);</div></pre></td></tr></table></figure></p>
+<p>上面的代码是在一个Fragment中调用的，getActivity()是获取Fragment所在的Activity对象（Activity是继承自Context），R.string.preference_file_key是该SharedPreferences的名字，mode是Context.MODE_PRIVATE私有类型。</p>
+<p>注意：当你给SharedPreferences起名字的时候最好是复杂点的，这样就能保证不会有名字重复却属于不同应用程序的SharedPreferences，最好是以你的应用包名再加上其他构成，比如”com.example.myapp.PREFERENCE_FILE_KEY”。</p>
+<p>获取一个Activity的SharedPreferences代码如下：<br>SharedPreferences sharedPref = getActivity().getPreferences(Context.MODE_PRIVATE);<br>上面是创建了一个Activity私有的SharedPreferences对象。</p>
+<blockquote>
+<p>注意：当你创建SharedPreferences时mode值的是MODE_WORLD_PRIVATE或者MODE_WORLD_WRITEABLE，你创建的Shared Preferences文件是可以被其他应用程序访问的。这两种mode都是比较危险的，因为其他应用程序也能访问，所以会造成数据外泄。google给出的建议是尽量不要用这种机制来进行数据共享传递，可以用其他方法来代替这种机制，比如使用ContentProvider，BroadcastReceiver或者Service。</p>
+</blockquote>
+<h2 id="写入数据到SharedPreferences文件"><a href="#写入数据到SharedPreferences文件" class="headerlink" title="写入数据到SharedPreferences文件"></a>写入数据到SharedPreferences文件</h2><p>写入数据到Shared Preferences是通过获取SharedPreferences.Editor对象，调用该对象的一些putXX(key,value)方法来写入key对应的值，然后调用commit()方法提交写入完成的，代码如下：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">SharedPreferences sharedPref = getActivity().getPreferences(Context.MODE_PRIVATE);</div><div class="line">SharedPreferences.Editor editor = sharedPref.edit();</div><div class="line">editor.putInt(getString(R.string.saved_high_score), newHighScore);</div><div class="line">editor.commit();</div></pre></td></tr></table></figure>
+<p>SharedPreferences.Editor对象的putXX(String key，数据类型)方法可以保存boolean、int、float、long、String和Set<string>类型的数据，但是put方法只是建立好键值对的数据联系，并没有保存，直到你调用commit()或者apply()方法。调用remove(String key)可以清除key对应的数据(还需要调用commit方法提交操作)，你也可以调用clear()方法把所有数据清除掉。</string></p>
+<blockquote>
+<p>注意：commit()和apply()都是提交对数据的操作，但是它们还是有些区别的：<br>1、commit方法有返回值，返回值是一个boolean变量，表示你的保存动作是否成功，apply是没有返回值的，所以如果你不需要返回值，也不关心提交是否成功可以用apply来代替commit；<br>2、apply是先把数据更改提交到内存，然后再异步保存到磁盘上，而commit这两个操作是同步的，所以在进行频繁提交数据更改时apply更为高效；</p>
+</blockquote>
+<p>SharedPreferences的getXX(String key, defValue)方法key就是之前调用SharedPreferences.Editor的put(String key,数据类型)方法时的key，defValue是在找不到对应的key的数据时返回的默认数据。</p>
+<h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><h3 id="保存数据分四步："><a href="#保存数据分四步：" class="headerlink" title="保存数据分四步："></a>保存数据分四步：</h3><p>1、获取SharedPreferences对象；<br>2、获取SharedPreferences.Editor对象；<br>3、调用put方法添加数据；<br>4、调用commit保存数据；  </p>
+<h3 id="获取数据很简单，分两步："><a href="#获取数据很简单，分两步：" class="headerlink" title="获取数据很简单，分两步："></a>获取数据很简单，分两步：</h3><p>1、获取SharedPreferences对象；<br>2、调用get方法获取key对应的值；</p>
+<p>转载至：<a href="http://www.cnblogs.com/2010wuhao/p/4670767.html" target="_blank" rel="external">wuhao_blog的博客园</a></p>
+]]></content>
+    
+    <summary type="html">
+    
+      &lt;h2 id=&quot;前言&quot;&gt;&lt;a href=&quot;#前言&quot; class=&quot;headerlink&quot; title=&quot;前言&quot;&gt;&lt;/a&gt;前言&lt;/h2&gt;&lt;p&gt;在天气预报这个项目中，几次遇到需要保存数据的地方。例如安装APP后首次启动时先进入几个连续的导航页面，还有再次进入APP时默认显示上一次查看的天气信息。这些需要保存的数据都是用SharedPreference来存储的，今天就来总结一下他的作用和用法&lt;/p&gt;
+&lt;h2 id=&quot;SharedPreference的作用&quot;&gt;&lt;a href=&quot;#SharedPreference的作用&quot; class=&quot;headerlink&quot; title=&quot;SharedPreference的作用&quot;&gt;&lt;/a&gt;SharedPreference的作用&lt;/h2&gt;&lt;p&gt;程序中处理的大部分问题都与数据有关，读取数据显示在UI上，读取的数据可以是本地的，也可以是网络的。保存用户数据到存储空间，可以是本地的数据库，文件等，也可以是保存到网络服务器。总之大部分的程序都是在和数据打交道。Android中数据保存比较方便灵活，今天就按照官网说说数据保存。&lt;/p&gt;
+&lt;p&gt;大多数Android应用程序都需要存储数据，在Android生命周期方法onPause中，你可以保存用户在程序中的进度数据，在用户再次进入程序时进行读取恢复。可能一些应用程序不需要保存用户的进度信息，但是用户对于应用程序的设置信息一定要保存。很多应用需要保存大量的数据到数据库或者文件里，比如看电视的应用，需要保存大量的频道信息。下面就总结一下在Android中数据是如何保存的。&lt;/p&gt;
+    
+    </summary>
+    
+    
+      <category term="Android" scheme="106.14.169.113/tags/Android/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>Android ListView数据内容不显示</title>
+    <link href="106.14.169.113/2017/09/06/Android-ListView%E6%95%B0%E6%8D%AE%E5%86%85%E5%AE%B9%E4%B8%8D%E6%98%BE%E7%A4%BA/"/>
+    <id>106.14.169.113/2017/09/06/Android-ListView数据内容不显示/</id>
+    <published>2017-09-06T06:33:41.000Z</published>
+    <updated>2017-09-10T01:48:26.532Z</updated>
+    
+    <content type="html"><![CDATA[<h2 id="遇到的问题"><a href="#遇到的问题" class="headerlink" title="遇到的问题"></a>遇到的问题</h2><p>在城市列表布局文件里，添加了一个ListView组件，并在相应的Activity文件中添加了适配器，数据是从一个数据库文件city.db中获取城市名称cityName，保存到mArrayList变量中，然后显示到ListView列表中。代码截图如下<br><img src="/img/ListView.png" alt="ListView"><br><a id="more"></a><br><img src="/img/adapter.png" alt="adapter"><br>预期的结果应该是在城市列表界面显示出列表，然而，结果是这样的：<br><img src="/img/结果.png" alt="结果"><br>什么都没有！！</p>
+<h2 id="解决过程"><a href="#解决过程" class="headerlink" title="解决过程"></a>解决过程</h2><h3 id="检查代码"><a href="#检查代码" class="headerlink" title="检查代码"></a>检查代码</h3><p>我真的是掘地三尺的检查代码，然而真的没有发现什么问题，对照教程上的代码，也没有发现什么不同的地方。好吧，似乎此路不通，换个方法</p>
+<h3 id="固定数组"><a href="#固定数组" class="headerlink" title="固定数组"></a>固定数组</h3><p>既然数据库文件读取的数据无法显示，那么给你个自定义的数组呢？于是定义了一个data数组，适配到LIstView上：<br><img src="/img/数组.png" alt="数组"><br>继续无效！！（垂头丧气）</p>
+<h3 id="通过数组资源设置列表项"><a href="#通过数组资源设置列表项" class="headerlink" title="通过数组资源设置列表项"></a>通过数组资源设置列表项</h3><p>不想说太多，直接上图吧：<br><img src="/img/entries.png" alt="entries"><br><img src="/img/array.png" alt="array"><br>仍然无效！表示很绝望！</p>
+<h2 id="结果和解决办法"><a href="#结果和解决办法" class="headerlink" title="结果和解决办法"></a>结果和解决办法</h2><p>折腾了一两个小时，当我知道结果的时候，我的内心是崩溃的。出现这个现象的原因不是列表内容没有显示出来，而是列表选项字体的颜色和列表背景颜色都是白色，所以看不到列表选项。办法是在layout目录下新建一个字体颜色不同的样式文件(list_item.xml)替换掉适配器里面的列表外观样式(simple_list_item_1)</p>
+]]></content>
+    
+    <summary type="html">
+    
+      &lt;h2 id=&quot;遇到的问题&quot;&gt;&lt;a href=&quot;#遇到的问题&quot; class=&quot;headerlink&quot; title=&quot;遇到的问题&quot;&gt;&lt;/a&gt;遇到的问题&lt;/h2&gt;&lt;p&gt;在城市列表布局文件里，添加了一个ListView组件，并在相应的Activity文件中添加了适配器，数据是从一个数据库文件city.db中获取城市名称cityName，保存到mArrayList变量中，然后显示到ListView列表中。代码截图如下&lt;br&gt;&lt;img src=&quot;/img/ListView.png&quot; alt=&quot;ListView&quot;&gt;&lt;br&gt;&lt;/p&gt;
+    
+    </summary>
+    
+    
+      <category term="Android" scheme="106.14.169.113/tags/Android/"/>
+    
+      <category term="踩坑日志" scheme="106.14.169.113/tags/%E8%B8%A9%E5%9D%91%E6%97%A5%E5%BF%97/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>创建Android项目：天气预报</title>
+    <link href="106.14.169.113/2017/09/05/%E5%88%9B%E5%BB%BAAndroid%E9%A1%B9%E7%9B%AE%EF%BC%9A%E5%A4%A9%E6%B0%94%E9%A2%84%E6%8A%A5/"/>
+    <id>106.14.169.113/2017/09/05/创建Android项目：天气预报/</id>
+    <published>2017-09-05T02:09:53.000Z</published>
+    <updated>2017-09-10T01:48:20.102Z</updated>
+    
+    <content type="html"><![CDATA[<p>暑假实习结束了，回到学校这两天总觉得无事可做，便想着创建个简单的Android项目来练练手，熟悉一下Android开发流程过程参考CSDN上一位大佬的<a href="http://blog.csdn.net/v_xchen_v/article/details/53688896" target="_blank" rel="external">博客教程</a></p>
+<p>然后很快就遇到了报错如下图，也是无奈<br><img src="/img/图片格式.png" alt="报错"></p>
+<p>自己搞不懂是什么意思，然后就百度了这是个什么原因导致。那么问题来了，到底错在哪了呢。原来是因为在设置组建的北京图片属性时，我用了一张原本是jpg格式的图片，然后我自己把后缀改成了.png，然后就报错了，于是我又重新找了一张png格式的图片换上去。运行，完美！</p>
+<p>一个小问题，记录一下！</p>
+]]></content>
+    
+    <summary type="html">
+    
+      &lt;p&gt;暑假实习结束了，回到学校这两天总觉得无事可做，便想着创建个简单的Android项目来练练手，熟悉一下Android开发流程过程参考CSDN上一位大佬的&lt;a href=&quot;http://blog.csdn.net/v_xchen_v/article/details/536888
+    
+    </summary>
+    
+      <category term="Android项目" scheme="106.14.169.113/categories/Android%E9%A1%B9%E7%9B%AE/"/>
+    
+    
+      <category term="Android" scheme="106.14.169.113/tags/Android/"/>
+    
+      <category term="踩坑日志" scheme="106.14.169.113/tags/%E8%B8%A9%E5%9D%91%E6%97%A5%E5%BF%97/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>First Blog</title>
+    <link href="106.14.169.113/2017/08/27/first-blog/"/>
+    <id>106.14.169.113/2017/08/27/first-blog/</id>
+    <published>2017-08-27T12:37:07.000Z</published>
+    <updated>2017-09-05T02:22:32.766Z</updated>
+    
+    <content type="html"><![CDATA[<p>这是我的第一篇文章，采用hexo+yilia搭建的博客</p>
+]]></content>
+    
+    <summary type="html">
+    
+      &lt;p&gt;这是我的第一篇文章，采用hexo+yilia搭建的博客&lt;/p&gt;
 
     
     </summary>
     
     
+      <category term="记录" scheme="106.14.169.113/tags/%E8%AE%B0%E5%BD%95/"/>
+    
   </entry>
   
   <entry>
     <title>Hello World</title>
-    <link href="http://yoursite.com/2017/08/27/hello-world/"/>
-    <id>http://yoursite.com/2017/08/27/hello-world/</id>
+    <link href="106.14.169.113/2017/08/27/hello-world/"/>
+    <id>106.14.169.113/2017/08/27/hello-world/</id>
     <published>2017-08-27T12:07:07.548Z</published>
-    <updated>2017-08-27T12:28:07.218Z</updated>
+    <updated>2017-09-06T13:00:08.338Z</updated>
     
     <content type="html"><![CDATA[<p>Welcome to <a href="https://hexo.io/" target="_blank" rel="external">Hexo</a>! This is your very first post. Check <a href="https://hexo.io/docs/" target="_blank" rel="external">documentation</a> for more info. If you get any problems when using Hexo, you can find the answer in <a href="https://hexo.io/docs/troubleshooting.html" target="_blank" rel="external">troubleshooting</a> or you can ask me on <a href="https://github.com/hexojs/hexo/issues" target="_blank" rel="external">GitHub</a>.</p>
 <h2 id="Quick-Start"><a href="#Quick-Start" class="headerlink" title="Quick Start"></a>Quick Start</h2><h3 id="Create-a-new-post"><a href="#Create-a-new-post" class="headerlink" title="Create a new post"></a>Create a new post</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">$ hexo new <span class="string">"My New Post"</span></div></pre></td></tr></table></figure>
 <p>More info: <a href="https://hexo.io/docs/writing.html" target="_blank" rel="external">Writing</a></p>
 <h3 id="Run-server"><a href="#Run-server" class="headerlink" title="Run server"></a>Run server</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">$ hexo server</div></pre></td></tr></table></figure>
+<a id="more"></a>
 <p>More info: <a href="https://hexo.io/docs/server.html" target="_blank" rel="external">Server</a></p>
 <h3 id="Generate-static-files"><a href="#Generate-static-files" class="headerlink" title="Generate static files"></a>Generate static files</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">$ hexo generate</div></pre></td></tr></table></figure>
 <p>More info: <a href="https://hexo.io/docs/generating.html" target="_blank" rel="external">Generating</a></p>
@@ -55,7 +202,10 @@
     
     <summary type="html">
     
-      &lt;p&gt;Welcome to &lt;a href=&quot;https://hexo.io/&quot; target=&quot;_blank&quot; rel=&quot;external&quot;&gt;Hexo&lt;/a&gt;! This is your very first post. Check &lt;a href=&quot;https://hexo.
+      &lt;p&gt;Welcome to &lt;a href=&quot;https://hexo.io/&quot; target=&quot;_blank&quot; rel=&quot;external&quot;&gt;Hexo&lt;/a&gt;! This is your very first post. Check &lt;a href=&quot;https://hexo.io/docs/&quot; target=&quot;_blank&quot; rel=&quot;external&quot;&gt;documentation&lt;/a&gt; for more info. If you get any problems when using Hexo, you can find the answer in &lt;a href=&quot;https://hexo.io/docs/troubleshooting.html&quot; target=&quot;_blank&quot; rel=&quot;external&quot;&gt;troubleshooting&lt;/a&gt; or you can ask me on &lt;a href=&quot;https://github.com/hexojs/hexo/issues&quot; target=&quot;_blank&quot; rel=&quot;external&quot;&gt;GitHub&lt;/a&gt;.&lt;/p&gt;
+&lt;h2 id=&quot;Quick-Start&quot;&gt;&lt;a href=&quot;#Quick-Start&quot; class=&quot;headerlink&quot; title=&quot;Quick Start&quot;&gt;&lt;/a&gt;Quick Start&lt;/h2&gt;&lt;h3 id=&quot;Create-a-new-post&quot;&gt;&lt;a href=&quot;#Create-a-new-post&quot; class=&quot;headerlink&quot; title=&quot;Create a new post&quot;&gt;&lt;/a&gt;Create a new post&lt;/h3&gt;&lt;figure class=&quot;highlight bash&quot;&gt;&lt;table&gt;&lt;tr&gt;&lt;td class=&quot;gutter&quot;&gt;&lt;pre&gt;&lt;div class=&quot;line&quot;&gt;1&lt;/div&gt;&lt;/pre&gt;&lt;/td&gt;&lt;td class=&quot;code&quot;&gt;&lt;pre&gt;&lt;div class=&quot;line&quot;&gt;$ hexo new &lt;span class=&quot;string&quot;&gt;&quot;My New Post&quot;&lt;/span&gt;&lt;/div&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;&lt;/figure&gt;
+&lt;p&gt;More info: &lt;a href=&quot;https://hexo.io/docs/writing.html&quot; target=&quot;_blank&quot; rel=&quot;external&quot;&gt;Writing&lt;/a&gt;&lt;/p&gt;
+&lt;h3 id=&quot;Run-server&quot;&gt;&lt;a href=&quot;#Run-server&quot; class=&quot;headerlink&quot; title=&quot;Run server&quot;&gt;&lt;/a&gt;Run server&lt;/h3&gt;&lt;figure class=&quot;highlight bash&quot;&gt;&lt;table&gt;&lt;tr&gt;&lt;td class=&quot;gutter&quot;&gt;&lt;pre&gt;&lt;div class=&quot;line&quot;&gt;1&lt;/div&gt;&lt;/pre&gt;&lt;/td&gt;&lt;td class=&quot;code&quot;&gt;&lt;pre&gt;&lt;div class=&quot;line&quot;&gt;$ hexo server&lt;/div&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;&lt;/figure&gt;
     
     </summary>
     
