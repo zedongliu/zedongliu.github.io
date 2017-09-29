@@ -6,14 +6,19 @@
   <meta name="renderer" content="webkit">
   <meta http-equiv="X-UA-Compatible" content="IE=edge" >
   <link rel="dns-prefetch" href="http://zedongliu.github.io">
-  <title>Tag: Android | 谁没个年少轻狂</title>
+  <title>ContentProvider的使用 | 谁没个年少轻狂</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta property="og:type" content="website">
-<meta property="og:title" content="谁没个年少轻狂">
-<meta property="og:url" content="http://zedongliu.github.io/tags/Android/index.html">
+  <meta name="description" content="内容提供器的用法一般有两种，一种是使用现有的内容提供器来读取和操作相应程序中的数据，另一种是创建自己的内容提供器给我们程序提供外部访问接口。如果一个应用程序通过内容提供器对其数据提供了外部访问接口，那么任何其他程序都可以对这部分数据进行访问。Android系统自带的电话簿，短信，媒体库等程序都提供了类似的访问接口。 ContentResolver的基本用法对于每一个应用程序来说，如果要访问内容提供">
+<meta name="keywords" content="Android">
+<meta property="og:type" content="article">
+<meta property="og:title" content="ContentProvider的使用">
+<meta property="og:url" content="http://zedongliu.github.io/2017/09/22/ContentProvider的使用/index.html">
 <meta property="og:site_name" content="谁没个年少轻狂">
+<meta property="og:description" content="内容提供器的用法一般有两种，一种是使用现有的内容提供器来读取和操作相应程序中的数据，另一种是创建自己的内容提供器给我们程序提供外部访问接口。如果一个应用程序通过内容提供器对其数据提供了外部访问接口，那么任何其他程序都可以对这部分数据进行访问。Android系统自带的电话簿，短信，媒体库等程序都提供了类似的访问接口。 ContentResolver的基本用法对于每一个应用程序来说，如果要访问内容提供">
+<meta property="og:updated_time" content="2017-09-22T03:37:31.748Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="谁没个年少轻狂">
+<meta name="twitter:title" content="ContentProvider的使用">
+<meta name="twitter:description" content="内容提供器的用法一般有两种，一种是使用现有的内容提供器来读取和操作相应程序中的数据，另一种是创建自己的内容提供器给我们程序提供外部访问接口。如果一个应用程序通过内容提供器对其数据提供了外部访问接口，那么任何其他程序都可以对这部分数据进行访问。Android系统自带的电话簿，短信，媒体库等程序都提供了类似的访问接口。 ContentResolver的基本用法对于每一个应用程序来说，如果要访问内容提供">
   
     <link rel="alternative" href="/atom.xml" title="谁没个年少轻狂" type="application/atom+xml">
   
@@ -151,36 +156,87 @@
             <canvas data-colors="#eaeaea" data-sectionHeight="100" data-contentId="js-content" id="myCanvas1" class="anm-canvas"></canvas>
           </div>
           <div id="js-content" class="content-ll">
-            
+            <article id="post-ContentProvider的使用" class="article article-type-post " itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
   
+    <h1 class="article-title" itemprop="name">
+      ContentProvider的使用
+    </h1>
   
-    
-    
-      
-      
-      <section class="archives-wrap">
-        <div class="archive-year-wrap">
-          <a href="/archives/2017" class="archive-year">2017</a>
-        </div>
-        <div class="archives">
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      	<div class="article-meta">
-	      	<a href="/2017/09/22/ContentProvider的使用/" class="archive-article-date">
+
+        
+        <a href="/2017/09/22/ContentProvider的使用/" class="archive-article-date">
   	<time datetime="2017-09-22T02:13:00.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2017-09-22</time>
 </a>
-        </div>
-    	 
-  
-    <h1 itemprop="name">
-      <a class="archive-article-title" href="/2017/09/22/ContentProvider的使用/">ContentProvider的使用</a>
-    </h1>
-  
+        
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>内容提供器的用法一般有两种，一种是使用现有的内容提供器来读取和操作相应程序中的数据，另一种是创建自己的内容提供器给我们程序提供外部访问接口。<br>如果一个应用程序通过内容提供器对其数据提供了外部访问接口，那么任何其他程序都可以对这部分数据进行访问。Android系统自带的电话簿，短信，媒体库等程序都提供了类似的访问接口。</p>
+<h2 id="ContentResolver的基本用法"><a href="#ContentResolver的基本用法" class="headerlink" title="ContentResolver的基本用法"></a>ContentResolver的基本用法</h2><p>对于每一个应用程序来说，如果要访问内容提供器中共享的数据，就一定要借助ContentResolver类，可以通过Context中的getContentResolcer()方法获取到该类的实例。ContentResolver中提供了一系列方法用于对数据进行CRUD操作。</p>
+<blockquote>
+<p>insert()方法用于添加数据<br>update()方法用于更新数据<br>delete()方法用于删除数据<br>query()方法用于查询数据  </p>
+</blockquote>
+<p>ContentResolver中增删改查方法都不接收表名参数，而是使用一个uri参数代替，这个参数内容被称为URI，内容URI给内容提供器中的数据建立了唯一标识符，内容URI标准格式如下：  content://com.example.app.provider/table1  </p>
+<p>得到URI字符串后，还需要将他解析成Uri对象才可以作为参数传入：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line">Uri uri = Uri.parse(&quot;content://com.example.app.provider/table1&quot;)  </div><div class="line"></div><div class="line">Cursor cursor = getContentResolver().query(</div><div class="line">    uri,</div><div class="line">    projection,</div><div class="line">    selection,</div><div class="line">    selectionArgs,</div><div class="line">    sortOrder</div><div class="line">);</div></pre></td></tr></table></figure></p>
+<a id="more"></a>
+<p>下表中对参数进行详细解释。  </p>
+<table>
+<thead>
+<tr>
+<th>query()方法参数</th>
+<th>对应SQL部分</th>
+<th>描述</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>uri</td>
+<td>from table_name</td>
+<td>指定查询某个应用程序下的某一张表</td>
+</tr>
+<tr>
+<td>projection</td>
+<td>select column1,column2</td>
+<td>指定查询的列名</td>
+</tr>
+<tr>
+<td>selection</td>
+<td>where column = value</td>
+<td>指定where的约束条件</td>
+</tr>
+<tr>
+<td>selectionArgs</td>
+<td>-</td>
+<td>为where中的占位符提供具体的值</td>
+</tr>
+<tr>
+<td>sortOrder</td>
+<td>order by column1,column2</td>
+<td>指定查询结果的排序方式</td>
+</tr>
+</tbody>
+</table>
+<p>查询结果仍然是一个Cursor对象<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line">if(cursor != null)&#123;</div><div class="line">    while(cursor.moveToNext())&#123;</div><div class="line">        String column1 = cursor.getString(cursor.getCollumnIndex(&quot;column1&quot;));</div><div class="line">        int column2 = cursor.getInt(cursor.getCollumnIndex(&quot;column2&quot;));</div><div class="line">    &#125;</div><div class="line">    cursor.close();//查询结束要将Cursor对象关闭！！</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<h2 id="创建自己的内容提供器"><a href="#创建自己的内容提供器" class="headerlink" title="创建自己的内容提供器"></a>创建自己的内容提供器</h2><p>通过新建一个类去继承ContentProvider的方式来创建自己的内容提供器。ContentProvider类中有6个抽象方法，在使用子类继承他的时候，需要将这6个方法全部重写。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div></pre></td><td class="code"><pre><div class="line">public class MyProvider extends ContentProvider&#123;</div><div class="line">    @Override</div><div class="line">    public boolean onCreate()&#123;</div><div class="line">        return false;</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    @Override</div><div class="line">    public Cursor query(Uri uri, String[] projection, String selection, String[] selectionArgs, String sortOrder)&#123;</div><div class="line">        return null;</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    @Override</div><div class="line">    public Uri insert(Uri uri, ContentValues values) &#123;</div><div class="line">        return null;</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    @Override</div><div class="line">    public int update(Uri uri, ContentValues values, String selection, String[] selectionArgs) &#123;</div><div class="line">        return 0;</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    @Override</div><div class="line">    public int delete(Uri uri, String selection, String[] selectionArgs) &#123;</div><div class="line">        return 0;</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    @Override</div><div class="line">    public String getType(Uri uri) &#123;</div><div class="line">        return null;</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<h3 id="方法介绍"><a href="#方法介绍" class="headerlink" title="方法介绍"></a>方法介绍</h3><h4 id="1-onCreate"><a href="#1-onCreate" class="headerlink" title="1.onCreate()"></a>1.onCreate()</h4><p>  初始化内容提供器的时候调用。通常会在这里完成对数据的创建和升级操作，返回true表示内容提供器初始化完成，false表示失败。  </p>
+<h4 id="2-query"><a href="#2-query" class="headerlink" title="2.query()"></a>2.query()</h4><p>  从内容提供器中查询数据。使用uri参数确定查询那张表，projection参数用于确定查询哪些列，selection和selectionArgs参数用于约束查询哪些行，sortOrder参数用于对结果进行排序，查询结果存放在Cursor对象中返回。  </p>
+<h4 id="3-insert"><a href="#3-insert" class="headerlink" title="3.insert()"></a>3.insert()</h4><p>  向内容提供器中添加一条数据。使用uri参数确定要添加到的表，待添加的数据保存在values参数中。添加完成后，返回一个用于表示这条新记录的URI。  </p>
+<h4 id="4-update"><a href="#4-update" class="headerlink" title="4.update()"></a>4.update()</h4><p>  更新内容提供器中已有的数据。使用uri参数确定更新哪张表中的数据，新数据保存在values参数中，selection和selectionArgs参数用于约束更新哪些行，受影响的行数将作为返回值返回。  </p>
+<h4 id="5-delete"><a href="#5-delete" class="headerlink" title="5.delete()"></a>5.delete()</h4><p>  从内容提供器中删除数据。使用uri参数确定删除哪张表中的数据，selection和selectionArgs参数用于约束删除哪些行，被删除的行数将作为返回值返回。   </p>
+<h4 id="6-getType"><a href="#6-getType" class="headerlink" title="6.getType()"></a>6.getType()</h4><p>  根据传入的内容URI来返回相应的MIME类型。  </p>
 
-        <div class="article-info info-on-right">
-          
+      
+
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      
 	<div class="article-tag tagcloud">
 		<i class="icon-price-tags icon"></i>
 		<ul class="article-tag-list">
@@ -192,228 +248,124 @@
 		</ul>
 	</div>
 
-          
+      
 
+      
+
+      
+        
+<div class="share-btn share-icons tooltip-left">
+  <div class="tooltip tooltip-east">
+    <span class="tooltip-item">
+      <a href="javascript:;" class="share-sns share-outer">
+        <i class="icon icon-share"></i>
+      </a>
+    </span>
+    <span class="tooltip-content">
+      <div class="share-wrap">
+        <div class="share-icons">
+          <a class="weibo share-sns" href="javascript:;" data-type="weibo">
+            <i class="icon icon-weibo"></i>
+          </a>
+          <a class="weixin share-sns wxFab" href="javascript:;" data-type="weixin">
+            <i class="icon icon-weixin"></i>
+          </a>
+          <a class="qq share-sns" href="javascript:;" data-type="qq">
+            <i class="icon icon-qq"></i>
+          </a>
+          <a class="douban share-sns" href="javascript:;" data-type="douban">
+            <i class="icon icon-douban"></i>
+          </a>
+          <a class="qzone share-sns" href="javascript:;" data-type="qzone">
+            <i class="icon icon-qzone"></i>
+          </a>
+          <a class="facebook share-sns" href="javascript:;" data-type="facebook">
+            <i class="icon icon-facebook"></i>
+          </a>
+          <a class="twitter share-sns" href="javascript:;" data-type="twitter">
+            <i class="icon icon-twitter"></i>
+          </a>
+          <a class="google share-sns" href="javascript:;" data-type="google">
+            <i class="icon icon-google"></i>
+          </a>
         </div>
-        <div class="clearfix"></div>
-    </header>
+      </div>
+    </span>
+  </div>
+</div>
+
+<div class="page-modal wx-share js-wx-box">
+    <a class="close js-modal-close" href="javascript:;"><i class="icon icon-close"></i></a>
+    <p>扫一扫，分享到微信</p>
+    <div class="wx-qrcode">
+      <img src="http://s.jiathis.com/qrcode.php?url=http://zedongliu.github.io/2017/09/22/ContentProvider的使用/" alt="微信分享二维码">
+    </div>
+</div>
+
+<div class="mask js-mask"></div>
+      
+      <div class="clearfix"></div>
+    </div>
   </div>
 </article>
+
   
-    
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      	<div class="article-meta">
-	      	<a href="/2017/09/17/Android学习笔记/" class="archive-article-date">
-  	<time datetime="2017-09-17T06:54:56.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2017-09-17</time>
-</a>
+<nav id="article-nav">
+  
+    <a href="/2017/09/29/Android触摸事件传递/" id="article-nav-newer" class="article-nav-link-wrap">
+      <i class="icon-circle-left"></i>
+      <div class="article-nav-title">
+        
+          Android触摸事件传递
+        
+      </div>
+    </a>
+  
+  
+    <a href="/2017/09/17/Android学习笔记/" id="article-nav-older" class="article-nav-link-wrap">
+      <div class="article-nav-title">Android学习笔记</div>
+      <i class="icon-circle-right"></i>
+    </a>
+  
+</nav>
+
+
+<aside class="wrap-side-operation">
+    <div class="mod-side-operation">
+        
+        <div class="jump-container" id="js-jump-container" style="display:none;">
+            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
+                <i class="icon-font icon-back"></i>
+            </a>
+            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
+                <i class="icon-font icon-plane jump-plane"></i>
+            </div>
         </div>
-    	 
-  
-    <h1 itemprop="name">
-      <a class="archive-article-title" href="/2017/09/17/Android学习笔记/">Android学习笔记</a>
-    </h1>
-  
-
-        <div class="article-info info-on-right">
-          
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color3">Android</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-          
-
-        </div>
-        <div class="clearfix"></div>
-    </header>
-  </div>
-</article>
-  
-    
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      	<div class="article-meta">
-	      	<a href="/2017/09/10/Handler的运行机制/" class="archive-article-date">
-  	<time datetime="2017-09-10T01:04:01.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2017-09-10</time>
-</a>
-        </div>
-    	 
-  
-    <h1 itemprop="name">
-      <a class="archive-article-title" href="/2017/09/10/Handler的运行机制/">Handler的运行机制</a>
-    </h1>
-  
-
-        <div class="article-info info-on-right">
-          
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color3">Android</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-          
-
-        </div>
-        <div class="clearfix"></div>
-    </header>
-  </div>
-</article>
-  
-    
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      	<div class="article-meta">
-	      	<a href="/2017/09/09/Android数据保存之SharedPreference/" class="archive-article-date">
-  	<time datetime="2017-09-09T01:55:42.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2017-09-09</time>
-</a>
-        </div>
-    	 
-  
-    <h1 itemprop="name">
-      <a class="archive-article-title" href="/2017/09/09/Android数据保存之SharedPreference/">Android数据保存之SharedPreference</a>
-    </h1>
-  
-
-        <div class="article-info info-on-right">
-          
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color3">Android</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-          
-
-        </div>
-        <div class="clearfix"></div>
-    </header>
-  </div>
-</article>
-  
-    
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      	<div class="article-meta">
-	      	<a href="/2017/09/06/Android-ListView数据内容不显示/" class="archive-article-date">
-  	<time datetime="2017-09-06T06:33:41.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2017-09-06</time>
-</a>
-        </div>
-    	 
-  
-    <h1 itemprop="name">
-      <a class="archive-article-title" href="/2017/09/06/Android-ListView数据内容不显示/">Android ListView数据内容不显示</a>
-    </h1>
-  
-
-        <div class="article-info info-on-right">
-          
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color3">Android</a>
-        		</li>
-      		 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color5">日常踩坑</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-          
-
-        </div>
-        <div class="clearfix"></div>
-    </header>
-  </div>
-</article>
-  
-    
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      	<div class="article-meta">
-	      	<a href="/2017/09/05/创建Android项目：天气预报/" class="archive-article-date">
-  	<time datetime="2017-09-05T02:09:53.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2017-09-05</time>
-</a>
-        </div>
-    	 
-  
-    <h1 itemprop="name">
-      <a class="archive-article-title" href="/2017/09/05/创建Android项目：天气预报/">创建Android项目：天气预报</a>
-    </h1>
-  
-
-        <div class="article-info info-on-right">
-          
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color3">Android</a>
-        		</li>
-      		 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color5">日常踩坑</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-          
-	<div class="article-category tagcloud">
-		<i class="icon-book icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="/categories/Android项目/" class="article-tag-list-link color5">Android项目</a>
-        		</li>
-      		
-		</ul>
-	</div>
+        
+        
+    </div>
+</aside>
 
 
-        </div>
-        <div class="clearfix"></div>
-    </header>
-  </div>
-</article>
+
   
   
-    </div></section>
+  
+  <div id="cloud-tie-wrapper" class="cloud-tie-wrapper"></div>
+<script>
+  var cloudTieConfig = {
+    url: "http://zedongliu.github.io/2017/09/22/ContentProvider的使用/", 
+    sourceId: "ContentProvider的使用",
+    productKey: "true",
+    target: "cloud-tie-wrapper"
+  };
+</script>
+<script src="//img1.cache.netease.com/f2e/tie/yun/sdk/loader.js"></script>
   
 
-    
+  
+
+  
 
 
           </div>
@@ -436,9 +388,9 @@
 	var yiliaConfig = {
 		mathjax: false,
 		isHome: false,
-		isPost: false,
+		isPost: true,
 		isArchive: false,
-		isTag: true,
+		isTag: false,
 		isCategory: false,
 		open_in_new: false,
 		toc_hide_index: true,

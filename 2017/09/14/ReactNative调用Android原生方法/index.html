@@ -6,14 +6,19 @@
   <meta name="renderer" content="webkit">
   <meta http-equiv="X-UA-Compatible" content="IE=edge" >
   <link rel="dns-prefetch" href="http://zedongliu.github.io">
-  <title>Tag: Android | 谁没个年少轻狂</title>
+  <title>ReactNative调用Android原生方法 | 谁没个年少轻狂</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta property="og:type" content="website">
-<meta property="og:title" content="谁没个年少轻狂">
-<meta property="og:url" content="http://zedongliu.github.io/tags/Android/index.html">
+  <meta name="description" content="在ReactNative的开发过程中，有时候我们不得不访问Android原生的API，这是我今年暑期实习时实际做过的，同时也在阿里的面试中被问到了这方面的问题，现在来总结一下，加深一下印象 创建一个原生模块首先需要在ReactNative项目的Android端项目目录下创建一个原生模块，这个原生模块是一个继承ReactContextBaseJavaModule的Java类,它可以实现一些JavaS">
+<meta name="keywords" content="ReactNative">
+<meta property="og:type" content="article">
+<meta property="og:title" content="ReactNative调用Android原生方法">
+<meta property="og:url" content="http://zedongliu.github.io/2017/09/14/ReactNative调用Android原生方法/index.html">
 <meta property="og:site_name" content="谁没个年少轻狂">
+<meta property="og:description" content="在ReactNative的开发过程中，有时候我们不得不访问Android原生的API，这是我今年暑期实习时实际做过的，同时也在阿里的面试中被问到了这方面的问题，现在来总结一下，加深一下印象 创建一个原生模块首先需要在ReactNative项目的Android端项目目录下创建一个原生模块，这个原生模块是一个继承ReactContextBaseJavaModule的Java类,它可以实现一些JavaS">
+<meta property="og:updated_time" content="2017-09-13T11:49:57.329Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="谁没个年少轻狂">
+<meta name="twitter:title" content="ReactNative调用Android原生方法">
+<meta name="twitter:description" content="在ReactNative的开发过程中，有时候我们不得不访问Android原生的API，这是我今年暑期实习时实际做过的，同时也在阿里的面试中被问到了这方面的问题，现在来总结一下，加深一下印象 创建一个原生模块首先需要在ReactNative项目的Android端项目目录下创建一个原生模块，这个原生模块是一个继承ReactContextBaseJavaModule的Java类,它可以实现一些JavaS">
   
     <link rel="alternative" href="/atom.xml" title="谁没个年少轻狂" type="application/atom+xml">
   
@@ -151,269 +156,194 @@
             <canvas data-colors="#eaeaea" data-sectionHeight="100" data-contentId="js-content" id="myCanvas1" class="anm-canvas"></canvas>
           </div>
           <div id="js-content" class="content-ll">
-            
-  
-  
+            <article id="post-ReactNative调用Android原生方法" class="article article-type-post " itemscope itemprop="blogPost">
+  <div class="article-inner">
     
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      ReactNative调用Android原生方法
+    </h1>
+  
+
+        
+        <a href="/2017/09/14/ReactNative调用Android原生方法/" class="archive-article-date">
+  	<time datetime="2017-09-14T10:46:13.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2017-09-14</time>
+</a>
+        
+      </header>
     
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>在ReactNative的开发过程中，有时候我们不得不访问Android原生的API，这是我今年暑期实习时实际做过的，同时也在阿里的面试中被问到了这方面的问题，现在来总结一下，加深一下印象</p>
+<h2 id="创建一个原生模块"><a href="#创建一个原生模块" class="headerlink" title="创建一个原生模块"></a>创建一个原生模块</h2><p>首先需要在ReactNative项目的Android端项目目录下创建一个原生模块，这个原生模块是一个继承ReactContextBaseJavaModule的Java类,它可以实现一些JavaScript所调用的原生功能.<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div></pre></td><td class="code"><pre><div class="line">public class RnTest extends ReactContextBaseJavaModule &#123;</div><div class="line">  public RnTest(ReactApplicationContext reactContext) &#123;</div><div class="line">    super(reactContext);</div><div class="line">  &#125;</div><div class="line"></div><div class="line">  // ReactContextBaseJavaModule要求派生类实现getName方法。这个函数用于返回一个字符串</div><div class="line">  // 这个字符串用于在JavaScript端标记这个原生模块</div><div class="line">  @Override</div><div class="line">  public String getName() &#123;</div><div class="line">    return &quot;ToastByAndroid&quot;;</div><div class="line">  &#125;</div><div class="line"></div><div class="line">  // 获取应用包名</div><div class="line">  // 要导出一个方法给JavaScript使用，Java方法需要使用注解@ReactMethod</div><div class="line">   @ReactMethod</div><div class="line">   public void getPackageName() &#123;</div><div class="line">     String name = getReactApplicationContext().getPackageName();</div><div class="line">     Toast.makeText(getReactApplicationContext(),name,Toast.LENGTH_LONG).show();</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<a id="more"></a>
+<h2 id="注册模块"><a href="#注册模块" class="headerlink" title="注册模块"></a>注册模块</h2><p>要使JavaScript端调用到原生模块还需注册这个原生模块。需实现一个类实现ReactPackage接口，并实现其中的抽象方法<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div></pre></td><td class="code"><pre><div class="line">public class ExampleReactPackage implements ReactPackage &#123;</div><div class="line">    @Override</div><div class="line">    public List&lt;NativeModule&gt; createNativeModules(ReactApplicationContext reactContext) &#123;</div><div class="line">      List&lt;NativeModule&gt; modules = new ArrayList&lt;&gt;();</div><div class="line">      modules.add(new RnTest(reactContext));</div><div class="line">      return modules;</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    @Override</div><div class="line">    public List&lt;Class&lt;? extends JavaScriptModule&gt;&gt; createJSModules() &#123;</div><div class="line">      return Collections.emptyList();</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    @Override</div><div class="line">    public List&lt;ViewManager&gt; createViewManagers(ReactApplicationContext reactContext) &#123;</div><div class="line">      return Collections.emptyList();</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<p>还需要在MainApplication.java文件中的getPackages方法中实例上面注册的类<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line">@Override</div><div class="line">  protected List&lt;ReactPackage&gt; getPackages() &#123;</div><div class="line">    return Arrays.&lt;ReactPackage&gt;asList(</div><div class="line">      new MainReactPackage(),</div><div class="line">      // 实例化注册类</div><div class="line">      new ExampleReactPackage());</div><div class="line">    &#125;</div><div class="line">  &#125;;</div></pre></td></tr></table></figure></p>
+<h2 id="JS调用Android原生方法"><a href="#JS调用Android原生方法" class="headerlink" title="JS调用Android原生方法"></a>JS调用Android原生方法</h2><h3 id="引入NativeMoudles模块"><a href="#引入NativeMoudles模块" class="headerlink" title="引入NativeMoudles模块"></a>引入NativeMoudles模块</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">import &#123; NativeModules &#125; from &apos;react-native&apos;;</div></pre></td></tr></table></figure>
+<h3 id="使用Android原生方法"><a href="#使用Android原生方法" class="headerlink" title="使用Android原生方法"></a>使用Android原生方法</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">//  这里的ToastByAndroid即为1.创建一个原生模块中getName()方法返回的字符串</div><div class="line">var rnToastAndroid = NativeModules.ToastByAndroid;</div><div class="line">rnToastAndroid.getPackageName();</div></pre></td></tr></table></figure>
+<h2 id="获取Android原生方法"><a href="#获取Android原生方法" class="headerlink" title="获取Android原生方法"></a>获取Android原生方法</h2><blockquote>
+<p>提供给js调用的原生android方法的返回类型必须是void，React Native的跨语言访问是异步进行的，所以想要给JavaScript返回一个值的唯一办法是使用回调函数或者发送事件</p>
+</blockquote>
+<h3 id="回调函数"><a href="#回调函数" class="headerlink" title="回调函数"></a>回调函数</h3><h4 id="Callback"><a href="#Callback" class="headerlink" title="Callback"></a>Callback</h4><p>Callback是react.bridge中的一个接口，它作为ReactMethod的一个传参，用来映射JavaScript的回调函数（function）。Callback接口只定义了一个方法invoke，invoke接受多个参数，这个参数必须是react.bridge中支持的参数<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div></pre></td><td class="code"><pre><div class="line">// android端代码</div><div class="line">  @ReactMethod</div><div class="line">  public void tryCallBack(String name,String psw,Callback errorCallback,Callback successCallback)&#123;</div><div class="line">    try&#123;</div><div class="line">      if(TextUtils.isEmpty(name)&amp;&amp;TextUtils.isEmpty(psw))&#123;</div><div class="line">        // 失败时回调</div><div class="line">        errorCallback.invoke(&quot;user or psw  is empty&quot;);</div><div class="line">      &#125;</div><div class="line">      // 成功时回调</div><div class="line">      successCallback.invoke(&quot;add user success&quot;);</div><div class="line">     &#125;catch(IllegalViewOperationException e)&#123;</div><div class="line">        // 失败时回调</div><div class="line">        errorCallback.invoke(e.getMessage());</div><div class="line">      &#125;</div><div class="line">    &#125;</div></pre></td></tr></table></figure></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">// RN端调用代码</div><div class="line">var rnToastAndroid = NativeModules.ToastByAndroid;</div><div class="line">rnToastAndroid.tryCallBack(&quot;luo&quot;,&quot;131&quot;,(errorCallback)=&gt;&#123;alert(errorCallback)&#125;,(successCallback)=&gt;&#123;alert(successCallback);&#125;);</div></pre></td></tr></table></figure>
+<h4 id="Promises"><a href="#Promises" class="headerlink" title="Promises"></a>Promises</h4><p>Promise是ES6中增加的对于异步编程和回调更加友好的API，使用Promise可以更简洁，更灵活地处理回调。在react.briage中定义的Promise接口,实现了resolve和reject的方法,resolve用来处理正确处理结果的情况，reject用来处理异常的情况。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div></pre></td><td class="code"><pre><div class="line">// android端代码</div><div class="line">@ReactMethod</div><div class="line">  public void tryPromise(String name, String psw, Promise promise)&#123;</div><div class="line">    try&#123;</div><div class="line">      if(TextUtils.isEmpty(name)&amp;&amp;TextUtils.isEmpty(psw))&#123;</div><div class="line">        promise.reject(&quot;0&quot;,&quot;user name  or psw is empty&quot;);</div><div class="line">      &#125;</div><div class="line">      WritableMap map = Arguments.createMap();</div><div class="line">      map.putString(&quot;user_id&quot;, &quot;success&quot;);</div><div class="line">      promise.resolve(map);</div><div class="line">      &#125;catch(IllegalViewOperationException e)&#123;</div><div class="line">         promise.reject(&quot;2&quot;,e.getMessage());</div><div class="line">      &#125;</div><div class="line">    &#125;</div></pre></td></tr></table></figure></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">// RN端调用代码</div><div class="line">rnToastAndroid.tryPromise(&apos;luo&apos;, &apos;131&apos;).then((map)=&gt; &#123; </div><div class="line">  alert(map[&apos;user_id&apos;]);&#125;, (code, message)=&gt; &#123;</div><div class="line">    alert(message);</div><div class="line">&#125;);</div></pre></td></tr></table></figure>
+<h2 id="Android主动向RN发送消息"><a href="#Android主动向RN发送消息" class="headerlink" title="Android主动向RN发送消息"></a>Android主动向RN发送消息</h2><h3 id="Android端代码"><a href="#Android端代码" class="headerlink" title="Android端代码"></a>Android端代码</h3><p>reactContext(可以想办法到1. 创建一个原生模块中获得)<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line">public  static void sendEvent(ReactContext reactContext, String eventName, int status)</div><div class="line">    &#123;</div><div class="line">        System.out.println(&quot;reactContext=&quot;+reactContext);</div><div class="line"></div><div class="line">        reactContext</div><div class="line">                .getJSModule(DeviceEventManagerModule.RCTDeviceEventEmitter.class)</div><div class="line">                .emit(eventName,status);</div><div class="line">    &#125;</div></pre></td></tr></table></figure></p>
+<h3 id="ReactNative端代码"><a href="#ReactNative端代码" class="headerlink" title="ReactNative端代码"></a>ReactNative端代码</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">// eventName为上面代码中的eventName，reminder为上面代码中的status</div><div class="line">DeviceEventEmitter.addListener(eventName, (reminder) =&gt; &#123;</div><div class="line">      console.log(reminder):</div><div class="line">    &#125;);</div></pre></td></tr></table></figure>
+<h2 id="ReactNative调用Android模版"><a href="#ReactNative调用Android模版" class="headerlink" title="ReactNative调用Android模版"></a>ReactNative调用Android模版</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div></pre></td><td class="code"><pre><div class="line">const RNBridgeModule = NativeModules.RNBridgeModule;</div><div class="line">nativeLanuchApp(message) &#123;</div><div class="line">    RNBridgeModule.nativePlayVideo(message);</div><div class="line">&#125;</div><div class="line"></div><div class="line">    &lt;TouchableOpacity onPress=&#123;() =&gt; &#123;</div><div class="line">        this.nativeLanuchApp(&quot;111&quot;);</div><div class="line">    &#125;&#125; &gt;</div><div class="line">        &lt;Text &gt;</div><div class="line">            try</div><div class="line">        &lt;/Text&gt;</div><div class="line">    &lt;/TouchableOpacity&gt;</div></pre></td></tr></table></figure>
+<p>参考文章：<a href="http://blog.csdn.net/u014131921/article/details/54668595" target="_blank" rel="external">ReactNative调用Android原生方法</a></p>
+
+      
+
+      
+    </div>
+    <div class="article-info article-info-index">
       
       
-      <section class="archives-wrap">
-        <div class="archive-year-wrap">
-          <a href="/archives/2017" class="archive-year">2017</a>
-        </div>
-        <div class="archives">
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      	<div class="article-meta">
-	      	<a href="/2017/09/22/ContentProvider的使用/" class="archive-article-date">
-  	<time datetime="2017-09-22T02:13:00.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2017-09-22</time>
-</a>
-        </div>
-    	 
-  
-    <h1 itemprop="name">
-      <a class="archive-article-title" href="/2017/09/22/ContentProvider的使用/">ContentProvider的使用</a>
-    </h1>
-  
-
-        <div class="article-info info-on-right">
-          
 	<div class="article-tag tagcloud">
 		<i class="icon-price-tags icon"></i>
 		<ul class="article-tag-list">
 			 
         		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color3">Android</a>
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color2">ReactNative</a>
         		</li>
       		
 		</ul>
 	</div>
 
-          
+      
 
+      
+
+      
+        
+<div class="share-btn share-icons tooltip-left">
+  <div class="tooltip tooltip-east">
+    <span class="tooltip-item">
+      <a href="javascript:;" class="share-sns share-outer">
+        <i class="icon icon-share"></i>
+      </a>
+    </span>
+    <span class="tooltip-content">
+      <div class="share-wrap">
+        <div class="share-icons">
+          <a class="weibo share-sns" href="javascript:;" data-type="weibo">
+            <i class="icon icon-weibo"></i>
+          </a>
+          <a class="weixin share-sns wxFab" href="javascript:;" data-type="weixin">
+            <i class="icon icon-weixin"></i>
+          </a>
+          <a class="qq share-sns" href="javascript:;" data-type="qq">
+            <i class="icon icon-qq"></i>
+          </a>
+          <a class="douban share-sns" href="javascript:;" data-type="douban">
+            <i class="icon icon-douban"></i>
+          </a>
+          <a class="qzone share-sns" href="javascript:;" data-type="qzone">
+            <i class="icon icon-qzone"></i>
+          </a>
+          <a class="facebook share-sns" href="javascript:;" data-type="facebook">
+            <i class="icon icon-facebook"></i>
+          </a>
+          <a class="twitter share-sns" href="javascript:;" data-type="twitter">
+            <i class="icon icon-twitter"></i>
+          </a>
+          <a class="google share-sns" href="javascript:;" data-type="google">
+            <i class="icon icon-google"></i>
+          </a>
         </div>
-        <div class="clearfix"></div>
-    </header>
+      </div>
+    </span>
+  </div>
+</div>
+
+<div class="page-modal wx-share js-wx-box">
+    <a class="close js-modal-close" href="javascript:;"><i class="icon icon-close"></i></a>
+    <p>扫一扫，分享到微信</p>
+    <div class="wx-qrcode">
+      <img src="http://s.jiathis.com/qrcode.php?url=http://zedongliu.github.io/2017/09/14/ReactNative调用Android原生方法/" alt="微信分享二维码">
+    </div>
+</div>
+
+<div class="mask js-mask"></div>
+      
+      <div class="clearfix"></div>
+    </div>
   </div>
 </article>
+
   
-    
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      	<div class="article-meta">
-	      	<a href="/2017/09/17/Android学习笔记/" class="archive-article-date">
-  	<time datetime="2017-09-17T06:54:56.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2017-09-17</time>
-</a>
+<nav id="article-nav">
+  
+    <a href="/2017/09/17/Android学习笔记/" id="article-nav-newer" class="article-nav-link-wrap">
+      <i class="icon-circle-left"></i>
+      <div class="article-nav-title">
+        
+          Android学习笔记
+        
+      </div>
+    </a>
+  
+  
+    <a href="/2017/09/13/阿里巴巴初面总结反思/" id="article-nav-older" class="article-nav-link-wrap">
+      <div class="article-nav-title">阿里巴巴初面总结反思</div>
+      <i class="icon-circle-right"></i>
+    </a>
+  
+</nav>
+
+
+<aside class="wrap-side-operation">
+    <div class="mod-side-operation">
+        
+        <div class="jump-container" id="js-jump-container" style="display:none;">
+            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
+                <i class="icon-font icon-back"></i>
+            </a>
+            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
+                <i class="icon-font icon-plane jump-plane"></i>
+            </div>
         </div>
-    	 
-  
-    <h1 itemprop="name">
-      <a class="archive-article-title" href="/2017/09/17/Android学习笔记/">Android学习笔记</a>
-    </h1>
-  
-
-        <div class="article-info info-on-right">
-          
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color3">Android</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-          
-
+        
+        
+        <div class="toc-container tooltip-left">
+            <i class="icon-font icon-category"></i>
+            <div class="tooltip tooltip-east">
+                <span class="tooltip-item">
+                </span>
+                <span class="tooltip-content">
+                    <div class="toc-article">
+                    <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#创建一个原生模块"><span class="toc-number">1.</span> <span class="toc-text">创建一个原生模块</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#注册模块"><span class="toc-number">2.</span> <span class="toc-text">注册模块</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#JS调用Android原生方法"><span class="toc-number">3.</span> <span class="toc-text">JS调用Android原生方法</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#引入NativeMoudles模块"><span class="toc-number">3.1.</span> <span class="toc-text">引入NativeMoudles模块</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#使用Android原生方法"><span class="toc-number">3.2.</span> <span class="toc-text">使用Android原生方法</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#获取Android原生方法"><span class="toc-number">4.</span> <span class="toc-text">获取Android原生方法</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#回调函数"><span class="toc-number">4.1.</span> <span class="toc-text">回调函数</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#Callback"><span class="toc-number">4.1.1.</span> <span class="toc-text">Callback</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#Promises"><span class="toc-number">4.1.2.</span> <span class="toc-text">Promises</span></a></li></ol></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Android主动向RN发送消息"><span class="toc-number">5.</span> <span class="toc-text">Android主动向RN发送消息</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#Android端代码"><span class="toc-number">5.1.</span> <span class="toc-text">Android端代码</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#ReactNative端代码"><span class="toc-number">5.2.</span> <span class="toc-text">ReactNative端代码</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#ReactNative调用Android模版"><span class="toc-number">6.</span> <span class="toc-text">ReactNative调用Android模版</span></a></li></ol>
+                    </div>
+                </span>
+            </div>
         </div>
-        <div class="clearfix"></div>
-    </header>
-  </div>
-</article>
-  
-    
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      	<div class="article-meta">
-	      	<a href="/2017/09/10/Handler的运行机制/" class="archive-article-date">
-  	<time datetime="2017-09-10T01:04:01.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2017-09-10</time>
-</a>
-        </div>
-    	 
-  
-    <h1 itemprop="name">
-      <a class="archive-article-title" href="/2017/09/10/Handler的运行机制/">Handler的运行机制</a>
-    </h1>
-  
-
-        <div class="article-info info-on-right">
-          
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color3">Android</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-          
-
-        </div>
-        <div class="clearfix"></div>
-    </header>
-  </div>
-</article>
-  
-    
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      	<div class="article-meta">
-	      	<a href="/2017/09/09/Android数据保存之SharedPreference/" class="archive-article-date">
-  	<time datetime="2017-09-09T01:55:42.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2017-09-09</time>
-</a>
-        </div>
-    	 
-  
-    <h1 itemprop="name">
-      <a class="archive-article-title" href="/2017/09/09/Android数据保存之SharedPreference/">Android数据保存之SharedPreference</a>
-    </h1>
-  
-
-        <div class="article-info info-on-right">
-          
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color3">Android</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-          
-
-        </div>
-        <div class="clearfix"></div>
-    </header>
-  </div>
-</article>
-  
-    
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      	<div class="article-meta">
-	      	<a href="/2017/09/06/Android-ListView数据内容不显示/" class="archive-article-date">
-  	<time datetime="2017-09-06T06:33:41.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2017-09-06</time>
-</a>
-        </div>
-    	 
-  
-    <h1 itemprop="name">
-      <a class="archive-article-title" href="/2017/09/06/Android-ListView数据内容不显示/">Android ListView数据内容不显示</a>
-    </h1>
-  
-
-        <div class="article-info info-on-right">
-          
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color3">Android</a>
-        		</li>
-      		 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color5">日常踩坑</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-          
-
-        </div>
-        <div class="clearfix"></div>
-    </header>
-  </div>
-</article>
-  
-    
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      	<div class="article-meta">
-	      	<a href="/2017/09/05/创建Android项目：天气预报/" class="archive-article-date">
-  	<time datetime="2017-09-05T02:09:53.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2017-09-05</time>
-</a>
-        </div>
-    	 
-  
-    <h1 itemprop="name">
-      <a class="archive-article-title" href="/2017/09/05/创建Android项目：天气预报/">创建Android项目：天气预报</a>
-    </h1>
-  
-
-        <div class="article-info info-on-right">
-          
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color3">Android</a>
-        		</li>
-      		 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color5">日常踩坑</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-          
-	<div class="article-category tagcloud">
-		<i class="icon-book icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="/categories/Android项目/" class="article-tag-list-link color5">Android项目</a>
-        		</li>
-      		
-		</ul>
-	</div>
+        
+    </div>
+</aside>
 
 
-        </div>
-        <div class="clearfix"></div>
-    </header>
-  </div>
-</article>
+
   
   
-    </div></section>
+  
+  <div id="cloud-tie-wrapper" class="cloud-tie-wrapper"></div>
+<script>
+  var cloudTieConfig = {
+    url: "http://zedongliu.github.io/2017/09/14/ReactNative调用Android原生方法/", 
+    sourceId: "ReactNative调用Android原生方法",
+    productKey: "true",
+    target: "cloud-tie-wrapper"
+  };
+</script>
+<script src="//img1.cache.netease.com/f2e/tie/yun/sdk/loader.js"></script>
   
 
-    
+  
+
+  
 
 
           </div>
@@ -436,9 +366,9 @@
 	var yiliaConfig = {
 		mathjax: false,
 		isHome: false,
-		isPost: false,
+		isPost: true,
 		isArchive: false,
-		isTag: true,
+		isTag: false,
 		isCategory: false,
 		open_in_new: false,
 		toc_hide_index: true,

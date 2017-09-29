@@ -4,9 +4,9 @@
   
   <link href="/atom.xml" rel="self"/>
   
-  <link href="106.14.169.113/"/>
-  <updated>2017-09-10T01:51:34.767Z</updated>
-  <id>106.14.169.113/</id>
+  <link href="http://zedongliu.github.io/"/>
+  <updated>2017-09-29T01:07:30.673Z</updated>
+  <id>http://zedongliu.github.io/</id>
   
   <author>
     <name>Soldier</name>
@@ -16,9 +16,271 @@
   <generator uri="http://hexo.io/">Hexo</generator>
   
   <entry>
+    <title>Android触摸事件传递</title>
+    <link href="http://zedongliu.github.io/2017/09/29/Android%E8%A7%A6%E6%91%B8%E4%BA%8B%E4%BB%B6%E4%BC%A0%E9%80%92/"/>
+    <id>http://zedongliu.github.io/2017/09/29/Android触摸事件传递/</id>
+    <published>2017-09-29T01:07:30.000Z</published>
+    <updated>2017-09-29T01:07:30.673Z</updated>
+    
+    <summary type="html">
+    
+    </summary>
+    
+    
+  </entry>
+  
+  <entry>
+    <title>ContentProvider的使用</title>
+    <link href="http://zedongliu.github.io/2017/09/22/ContentProvider%E7%9A%84%E4%BD%BF%E7%94%A8/"/>
+    <id>http://zedongliu.github.io/2017/09/22/ContentProvider的使用/</id>
+    <published>2017-09-22T02:13:00.000Z</published>
+    <updated>2017-09-22T03:37:31.748Z</updated>
+    
+    <content type="html"><![CDATA[<p>内容提供器的用法一般有两种，一种是使用现有的内容提供器来读取和操作相应程序中的数据，另一种是创建自己的内容提供器给我们程序提供外部访问接口。<br>如果一个应用程序通过内容提供器对其数据提供了外部访问接口，那么任何其他程序都可以对这部分数据进行访问。Android系统自带的电话簿，短信，媒体库等程序都提供了类似的访问接口。</p>
+<h2 id="ContentResolver的基本用法"><a href="#ContentResolver的基本用法" class="headerlink" title="ContentResolver的基本用法"></a>ContentResolver的基本用法</h2><p>对于每一个应用程序来说，如果要访问内容提供器中共享的数据，就一定要借助ContentResolver类，可以通过Context中的getContentResolcer()方法获取到该类的实例。ContentResolver中提供了一系列方法用于对数据进行CRUD操作。</p>
+<blockquote>
+<p>insert()方法用于添加数据<br>update()方法用于更新数据<br>delete()方法用于删除数据<br>query()方法用于查询数据  </p>
+</blockquote>
+<p>ContentResolver中增删改查方法都不接收表名参数，而是使用一个uri参数代替，这个参数内容被称为URI，内容URI给内容提供器中的数据建立了唯一标识符，内容URI标准格式如下：  content://com.example.app.provider/table1  </p>
+<p>得到URI字符串后，还需要将他解析成Uri对象才可以作为参数传入：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line">Uri uri = Uri.parse(&quot;content://com.example.app.provider/table1&quot;)  </div><div class="line"></div><div class="line">Cursor cursor = getContentResolver().query(</div><div class="line">    uri,</div><div class="line">    projection,</div><div class="line">    selection,</div><div class="line">    selectionArgs,</div><div class="line">    sortOrder</div><div class="line">);</div></pre></td></tr></table></figure></p>
+<a id="more"></a>
+<p>下表中对参数进行详细解释。  </p>
+<table>
+<thead>
+<tr>
+<th>query()方法参数</th>
+<th>对应SQL部分</th>
+<th>描述</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>uri</td>
+<td>from table_name</td>
+<td>指定查询某个应用程序下的某一张表</td>
+</tr>
+<tr>
+<td>projection</td>
+<td>select column1,column2</td>
+<td>指定查询的列名</td>
+</tr>
+<tr>
+<td>selection</td>
+<td>where column = value</td>
+<td>指定where的约束条件</td>
+</tr>
+<tr>
+<td>selectionArgs</td>
+<td>-</td>
+<td>为where中的占位符提供具体的值</td>
+</tr>
+<tr>
+<td>sortOrder</td>
+<td>order by column1,column2</td>
+<td>指定查询结果的排序方式</td>
+</tr>
+</tbody>
+</table>
+<p>查询结果仍然是一个Cursor对象<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line">if(cursor != null)&#123;</div><div class="line">    while(cursor.moveToNext())&#123;</div><div class="line">        String column1 = cursor.getString(cursor.getCollumnIndex(&quot;column1&quot;));</div><div class="line">        int column2 = cursor.getInt(cursor.getCollumnIndex(&quot;column2&quot;));</div><div class="line">    &#125;</div><div class="line">    cursor.close();//查询结束要将Cursor对象关闭！！</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<h2 id="创建自己的内容提供器"><a href="#创建自己的内容提供器" class="headerlink" title="创建自己的内容提供器"></a>创建自己的内容提供器</h2><p>通过新建一个类去继承ContentProvider的方式来创建自己的内容提供器。ContentProvider类中有6个抽象方法，在使用子类继承他的时候，需要将这6个方法全部重写。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div></pre></td><td class="code"><pre><div class="line">public class MyProvider extends ContentProvider&#123;</div><div class="line">    @Override</div><div class="line">    public boolean onCreate()&#123;</div><div class="line">        return false;</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    @Override</div><div class="line">    public Cursor query(Uri uri, String[] projection, String selection, String[] selectionArgs, String sortOrder)&#123;</div><div class="line">        return null;</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    @Override</div><div class="line">    public Uri insert(Uri uri, ContentValues values) &#123;</div><div class="line">        return null;</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    @Override</div><div class="line">    public int update(Uri uri, ContentValues values, String selection, String[] selectionArgs) &#123;</div><div class="line">        return 0;</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    @Override</div><div class="line">    public int delete(Uri uri, String selection, String[] selectionArgs) &#123;</div><div class="line">        return 0;</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    @Override</div><div class="line">    public String getType(Uri uri) &#123;</div><div class="line">        return null;</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<h3 id="方法介绍"><a href="#方法介绍" class="headerlink" title="方法介绍"></a>方法介绍</h3><h4 id="1-onCreate"><a href="#1-onCreate" class="headerlink" title="1.onCreate()"></a>1.onCreate()</h4><p>  初始化内容提供器的时候调用。通常会在这里完成对数据的创建和升级操作，返回true表示内容提供器初始化完成，false表示失败。  </p>
+<h4 id="2-query"><a href="#2-query" class="headerlink" title="2.query()"></a>2.query()</h4><p>  从内容提供器中查询数据。使用uri参数确定查询那张表，projection参数用于确定查询哪些列，selection和selectionArgs参数用于约束查询哪些行，sortOrder参数用于对结果进行排序，查询结果存放在Cursor对象中返回。  </p>
+<h4 id="3-insert"><a href="#3-insert" class="headerlink" title="3.insert()"></a>3.insert()</h4><p>  向内容提供器中添加一条数据。使用uri参数确定要添加到的表，待添加的数据保存在values参数中。添加完成后，返回一个用于表示这条新记录的URI。  </p>
+<h4 id="4-update"><a href="#4-update" class="headerlink" title="4.update()"></a>4.update()</h4><p>  更新内容提供器中已有的数据。使用uri参数确定更新哪张表中的数据，新数据保存在values参数中，selection和selectionArgs参数用于约束更新哪些行，受影响的行数将作为返回值返回。  </p>
+<h4 id="5-delete"><a href="#5-delete" class="headerlink" title="5.delete()"></a>5.delete()</h4><p>  从内容提供器中删除数据。使用uri参数确定删除哪张表中的数据，selection和selectionArgs参数用于约束删除哪些行，被删除的行数将作为返回值返回。   </p>
+<h4 id="6-getType"><a href="#6-getType" class="headerlink" title="6.getType()"></a>6.getType()</h4><p>  根据传入的内容URI来返回相应的MIME类型。  </p>
+]]></content>
+    
+    <summary type="html">
+    
+      &lt;p&gt;内容提供器的用法一般有两种，一种是使用现有的内容提供器来读取和操作相应程序中的数据，另一种是创建自己的内容提供器给我们程序提供外部访问接口。&lt;br&gt;如果一个应用程序通过内容提供器对其数据提供了外部访问接口，那么任何其他程序都可以对这部分数据进行访问。Android系统自带的电话簿，短信，媒体库等程序都提供了类似的访问接口。&lt;/p&gt;
+&lt;h2 id=&quot;ContentResolver的基本用法&quot;&gt;&lt;a href=&quot;#ContentResolver的基本用法&quot; class=&quot;headerlink&quot; title=&quot;ContentResolver的基本用法&quot;&gt;&lt;/a&gt;ContentResolver的基本用法&lt;/h2&gt;&lt;p&gt;对于每一个应用程序来说，如果要访问内容提供器中共享的数据，就一定要借助ContentResolver类，可以通过Context中的getContentResolcer()方法获取到该类的实例。ContentResolver中提供了一系列方法用于对数据进行CRUD操作。&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;insert()方法用于添加数据&lt;br&gt;update()方法用于更新数据&lt;br&gt;delete()方法用于删除数据&lt;br&gt;query()方法用于查询数据  &lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;p&gt;ContentResolver中增删改查方法都不接收表名参数，而是使用一个uri参数代替，这个参数内容被称为URI，内容URI给内容提供器中的数据建立了唯一标识符，内容URI标准格式如下：  content://com.example.app.provider/table1  &lt;/p&gt;
+&lt;p&gt;得到URI字符串后，还需要将他解析成Uri对象才可以作为参数传入：&lt;br&gt;&lt;figure class=&quot;highlight plain&quot;&gt;&lt;table&gt;&lt;tr&gt;&lt;td class=&quot;gutter&quot;&gt;&lt;pre&gt;&lt;div class=&quot;line&quot;&gt;1&lt;/div&gt;&lt;div class=&quot;line&quot;&gt;2&lt;/div&gt;&lt;div class=&quot;line&quot;&gt;3&lt;/div&gt;&lt;div class=&quot;line&quot;&gt;4&lt;/div&gt;&lt;div class=&quot;line&quot;&gt;5&lt;/div&gt;&lt;div class=&quot;line&quot;&gt;6&lt;/div&gt;&lt;div class=&quot;line&quot;&gt;7&lt;/div&gt;&lt;div class=&quot;line&quot;&gt;8&lt;/div&gt;&lt;div class=&quot;line&quot;&gt;9&lt;/div&gt;&lt;/pre&gt;&lt;/td&gt;&lt;td class=&quot;code&quot;&gt;&lt;pre&gt;&lt;div class=&quot;line&quot;&gt;Uri uri = Uri.parse(&amp;quot;content://com.example.app.provider/table1&amp;quot;)  &lt;/div&gt;&lt;div class=&quot;line&quot;&gt;&lt;/div&gt;&lt;div class=&quot;line&quot;&gt;Cursor cursor = getContentResolver().query(&lt;/div&gt;&lt;div class=&quot;line&quot;&gt;    uri,&lt;/div&gt;&lt;div class=&quot;line&quot;&gt;    projection,&lt;/div&gt;&lt;div class=&quot;line&quot;&gt;    selection,&lt;/div&gt;&lt;div class=&quot;line&quot;&gt;    selectionArgs,&lt;/div&gt;&lt;div class=&quot;line&quot;&gt;    sortOrder&lt;/div&gt;&lt;div class=&quot;line&quot;&gt;);&lt;/div&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;&lt;/figure&gt;&lt;/p&gt;
+    
+    </summary>
+    
+    
+      <category term="Android" scheme="http://zedongliu.github.io/tags/Android/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>Android学习笔记</title>
+    <link href="http://zedongliu.github.io/2017/09/17/Android%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/"/>
+    <id>http://zedongliu.github.io/2017/09/17/Android学习笔记/</id>
+    <published>2017-09-17T06:54:56.000Z</published>
+    <updated>2017-09-17T07:07:17.169Z</updated>
+    
+    <content type="html"><![CDATA[<h2 id="Activity"><a href="#Activity" class="headerlink" title="Activity"></a>Activity</h2><p><img src="/img/0917note/Activity.jpg" alt="Activity"><br><a id="more"></a><br><img src="/img/0917note/Activity2.jpg" alt="Activity2"></p>
+<h2 id="Fragment"><a href="#Fragment" class="headerlink" title="Fragment"></a>Fragment</h2><p><img src="/img/0917note/Fragment.jpg" alt="Fragment">  </p>
+<p><img src="/img/0917note/Fragment2.jpg" alt="Fragment2"></p>
+<h2 id="Service"><a href="#Service" class="headerlink" title="Service"></a>Service</h2><p><img src="/img/0917note/Service.jpg" alt="Service"></p>
+<h2 id="广播"><a href="#广播" class="headerlink" title="广播"></a>广播</h2><p><img src="/img/0917note/广播.jpg" alt="广播"></p>
+]]></content>
+    
+    <summary type="html">
+    
+      &lt;h2 id=&quot;Activity&quot;&gt;&lt;a href=&quot;#Activity&quot; class=&quot;headerlink&quot; title=&quot;Activity&quot;&gt;&lt;/a&gt;Activity&lt;/h2&gt;&lt;p&gt;&lt;img src=&quot;/img/0917note/Activity.jpg&quot; alt=&quot;Activity&quot;&gt;&lt;br&gt;&lt;/p&gt;
+    
+    </summary>
+    
+    
+      <category term="Android" scheme="http://zedongliu.github.io/tags/Android/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>ReactNative调用Android原生方法</title>
+    <link href="http://zedongliu.github.io/2017/09/14/ReactNative%E8%B0%83%E7%94%A8Android%E5%8E%9F%E7%94%9F%E6%96%B9%E6%B3%95/"/>
+    <id>http://zedongliu.github.io/2017/09/14/ReactNative调用Android原生方法/</id>
+    <published>2017-09-14T10:46:13.000Z</published>
+    <updated>2017-09-13T11:49:57.329Z</updated>
+    
+    <content type="html"><![CDATA[<p>在ReactNative的开发过程中，有时候我们不得不访问Android原生的API，这是我今年暑期实习时实际做过的，同时也在阿里的面试中被问到了这方面的问题，现在来总结一下，加深一下印象</p>
+<h2 id="创建一个原生模块"><a href="#创建一个原生模块" class="headerlink" title="创建一个原生模块"></a>创建一个原生模块</h2><p>首先需要在ReactNative项目的Android端项目目录下创建一个原生模块，这个原生模块是一个继承ReactContextBaseJavaModule的Java类,它可以实现一些JavaScript所调用的原生功能.<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div></pre></td><td class="code"><pre><div class="line">public class RnTest extends ReactContextBaseJavaModule &#123;</div><div class="line">  public RnTest(ReactApplicationContext reactContext) &#123;</div><div class="line">    super(reactContext);</div><div class="line">  &#125;</div><div class="line"></div><div class="line">  // ReactContextBaseJavaModule要求派生类实现getName方法。这个函数用于返回一个字符串</div><div class="line">  // 这个字符串用于在JavaScript端标记这个原生模块</div><div class="line">  @Override</div><div class="line">  public String getName() &#123;</div><div class="line">    return &quot;ToastByAndroid&quot;;</div><div class="line">  &#125;</div><div class="line"></div><div class="line">  // 获取应用包名</div><div class="line">  // 要导出一个方法给JavaScript使用，Java方法需要使用注解@ReactMethod</div><div class="line">   @ReactMethod</div><div class="line">   public void getPackageName() &#123;</div><div class="line">     String name = getReactApplicationContext().getPackageName();</div><div class="line">     Toast.makeText(getReactApplicationContext(),name,Toast.LENGTH_LONG).show();</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<a id="more"></a>
+<h2 id="注册模块"><a href="#注册模块" class="headerlink" title="注册模块"></a>注册模块</h2><p>要使JavaScript端调用到原生模块还需注册这个原生模块。需实现一个类实现ReactPackage接口，并实现其中的抽象方法<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div></pre></td><td class="code"><pre><div class="line">public class ExampleReactPackage implements ReactPackage &#123;</div><div class="line">    @Override</div><div class="line">    public List&lt;NativeModule&gt; createNativeModules(ReactApplicationContext reactContext) &#123;</div><div class="line">      List&lt;NativeModule&gt; modules = new ArrayList&lt;&gt;();</div><div class="line">      modules.add(new RnTest(reactContext));</div><div class="line">      return modules;</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    @Override</div><div class="line">    public List&lt;Class&lt;? extends JavaScriptModule&gt;&gt; createJSModules() &#123;</div><div class="line">      return Collections.emptyList();</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    @Override</div><div class="line">    public List&lt;ViewManager&gt; createViewManagers(ReactApplicationContext reactContext) &#123;</div><div class="line">      return Collections.emptyList();</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<p>还需要在MainApplication.java文件中的getPackages方法中实例上面注册的类<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line">@Override</div><div class="line">  protected List&lt;ReactPackage&gt; getPackages() &#123;</div><div class="line">    return Arrays.&lt;ReactPackage&gt;asList(</div><div class="line">      new MainReactPackage(),</div><div class="line">      // 实例化注册类</div><div class="line">      new ExampleReactPackage());</div><div class="line">    &#125;</div><div class="line">  &#125;;</div></pre></td></tr></table></figure></p>
+<h2 id="JS调用Android原生方法"><a href="#JS调用Android原生方法" class="headerlink" title="JS调用Android原生方法"></a>JS调用Android原生方法</h2><h3 id="引入NativeMoudles模块"><a href="#引入NativeMoudles模块" class="headerlink" title="引入NativeMoudles模块"></a>引入NativeMoudles模块</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">import &#123; NativeModules &#125; from &apos;react-native&apos;;</div></pre></td></tr></table></figure>
+<h3 id="使用Android原生方法"><a href="#使用Android原生方法" class="headerlink" title="使用Android原生方法"></a>使用Android原生方法</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">//  这里的ToastByAndroid即为1.创建一个原生模块中getName()方法返回的字符串</div><div class="line">var rnToastAndroid = NativeModules.ToastByAndroid;</div><div class="line">rnToastAndroid.getPackageName();</div></pre></td></tr></table></figure>
+<h2 id="获取Android原生方法"><a href="#获取Android原生方法" class="headerlink" title="获取Android原生方法"></a>获取Android原生方法</h2><blockquote>
+<p>提供给js调用的原生android方法的返回类型必须是void，React Native的跨语言访问是异步进行的，所以想要给JavaScript返回一个值的唯一办法是使用回调函数或者发送事件</p>
+</blockquote>
+<h3 id="回调函数"><a href="#回调函数" class="headerlink" title="回调函数"></a>回调函数</h3><h4 id="Callback"><a href="#Callback" class="headerlink" title="Callback"></a>Callback</h4><p>Callback是react.bridge中的一个接口，它作为ReactMethod的一个传参，用来映射JavaScript的回调函数（function）。Callback接口只定义了一个方法invoke，invoke接受多个参数，这个参数必须是react.bridge中支持的参数<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div></pre></td><td class="code"><pre><div class="line">// android端代码</div><div class="line">  @ReactMethod</div><div class="line">  public void tryCallBack(String name,String psw,Callback errorCallback,Callback successCallback)&#123;</div><div class="line">    try&#123;</div><div class="line">      if(TextUtils.isEmpty(name)&amp;&amp;TextUtils.isEmpty(psw))&#123;</div><div class="line">        // 失败时回调</div><div class="line">        errorCallback.invoke(&quot;user or psw  is empty&quot;);</div><div class="line">      &#125;</div><div class="line">      // 成功时回调</div><div class="line">      successCallback.invoke(&quot;add user success&quot;);</div><div class="line">     &#125;catch(IllegalViewOperationException e)&#123;</div><div class="line">        // 失败时回调</div><div class="line">        errorCallback.invoke(e.getMessage());</div><div class="line">      &#125;</div><div class="line">    &#125;</div></pre></td></tr></table></figure></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">// RN端调用代码</div><div class="line">var rnToastAndroid = NativeModules.ToastByAndroid;</div><div class="line">rnToastAndroid.tryCallBack(&quot;luo&quot;,&quot;131&quot;,(errorCallback)=&gt;&#123;alert(errorCallback)&#125;,(successCallback)=&gt;&#123;alert(successCallback);&#125;);</div></pre></td></tr></table></figure>
+<h4 id="Promises"><a href="#Promises" class="headerlink" title="Promises"></a>Promises</h4><p>Promise是ES6中增加的对于异步编程和回调更加友好的API，使用Promise可以更简洁，更灵活地处理回调。在react.briage中定义的Promise接口,实现了resolve和reject的方法,resolve用来处理正确处理结果的情况，reject用来处理异常的情况。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div></pre></td><td class="code"><pre><div class="line">// android端代码</div><div class="line">@ReactMethod</div><div class="line">  public void tryPromise(String name, String psw, Promise promise)&#123;</div><div class="line">    try&#123;</div><div class="line">      if(TextUtils.isEmpty(name)&amp;&amp;TextUtils.isEmpty(psw))&#123;</div><div class="line">        promise.reject(&quot;0&quot;,&quot;user name  or psw is empty&quot;);</div><div class="line">      &#125;</div><div class="line">      WritableMap map = Arguments.createMap();</div><div class="line">      map.putString(&quot;user_id&quot;, &quot;success&quot;);</div><div class="line">      promise.resolve(map);</div><div class="line">      &#125;catch(IllegalViewOperationException e)&#123;</div><div class="line">         promise.reject(&quot;2&quot;,e.getMessage());</div><div class="line">      &#125;</div><div class="line">    &#125;</div></pre></td></tr></table></figure></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">// RN端调用代码</div><div class="line">rnToastAndroid.tryPromise(&apos;luo&apos;, &apos;131&apos;).then((map)=&gt; &#123; </div><div class="line">  alert(map[&apos;user_id&apos;]);&#125;, (code, message)=&gt; &#123;</div><div class="line">    alert(message);</div><div class="line">&#125;);</div></pre></td></tr></table></figure>
+<h2 id="Android主动向RN发送消息"><a href="#Android主动向RN发送消息" class="headerlink" title="Android主动向RN发送消息"></a>Android主动向RN发送消息</h2><h3 id="Android端代码"><a href="#Android端代码" class="headerlink" title="Android端代码"></a>Android端代码</h3><p>reactContext(可以想办法到1. 创建一个原生模块中获得)<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line">public  static void sendEvent(ReactContext reactContext, String eventName, int status)</div><div class="line">    &#123;</div><div class="line">        System.out.println(&quot;reactContext=&quot;+reactContext);</div><div class="line"></div><div class="line">        reactContext</div><div class="line">                .getJSModule(DeviceEventManagerModule.RCTDeviceEventEmitter.class)</div><div class="line">                .emit(eventName,status);</div><div class="line">    &#125;</div></pre></td></tr></table></figure></p>
+<h3 id="ReactNative端代码"><a href="#ReactNative端代码" class="headerlink" title="ReactNative端代码"></a>ReactNative端代码</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">// eventName为上面代码中的eventName，reminder为上面代码中的status</div><div class="line">DeviceEventEmitter.addListener(eventName, (reminder) =&gt; &#123;</div><div class="line">      console.log(reminder):</div><div class="line">    &#125;);</div></pre></td></tr></table></figure>
+<h2 id="ReactNative调用Android模版"><a href="#ReactNative调用Android模版" class="headerlink" title="ReactNative调用Android模版"></a>ReactNative调用Android模版</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div></pre></td><td class="code"><pre><div class="line">const RNBridgeModule = NativeModules.RNBridgeModule;</div><div class="line">nativeLanuchApp(message) &#123;</div><div class="line">    RNBridgeModule.nativePlayVideo(message);</div><div class="line">&#125;</div><div class="line"></div><div class="line">    &lt;TouchableOpacity onPress=&#123;() =&gt; &#123;</div><div class="line">        this.nativeLanuchApp(&quot;111&quot;);</div><div class="line">    &#125;&#125; &gt;</div><div class="line">        &lt;Text &gt;</div><div class="line">            try</div><div class="line">        &lt;/Text&gt;</div><div class="line">    &lt;/TouchableOpacity&gt;</div></pre></td></tr></table></figure>
+<p>参考文章：<a href="http://blog.csdn.net/u014131921/article/details/54668595" target="_blank" rel="external">ReactNative调用Android原生方法</a></p>
+]]></content>
+    
+    <summary type="html">
+    
+      &lt;p&gt;在ReactNative的开发过程中，有时候我们不得不访问Android原生的API，这是我今年暑期实习时实际做过的，同时也在阿里的面试中被问到了这方面的问题，现在来总结一下，加深一下印象&lt;/p&gt;
+&lt;h2 id=&quot;创建一个原生模块&quot;&gt;&lt;a href=&quot;#创建一个原生模块&quot; class=&quot;headerlink&quot; title=&quot;创建一个原生模块&quot;&gt;&lt;/a&gt;创建一个原生模块&lt;/h2&gt;&lt;p&gt;首先需要在ReactNative项目的Android端项目目录下创建一个原生模块，这个原生模块是一个继承ReactContextBaseJavaModule的Java类,它可以实现一些JavaScript所调用的原生功能.&lt;br&gt;&lt;figure class=&quot;highlight plain&quot;&gt;&lt;table&gt;&lt;tr&gt;&lt;td class=&quot;gutter&quot;&gt;&lt;pre&gt;&lt;div class=&quot;line&quot;&gt;1&lt;/div&gt;&lt;div class=&quot;line&quot;&gt;2&lt;/div&gt;&lt;div class=&quot;line&quot;&gt;3&lt;/div&gt;&lt;div class=&quot;line&quot;&gt;4&lt;/div&gt;&lt;div class=&quot;line&quot;&gt;5&lt;/div&gt;&lt;div class=&quot;line&quot;&gt;6&lt;/div&gt;&lt;div class=&quot;line&quot;&gt;7&lt;/div&gt;&lt;div class=&quot;line&quot;&gt;8&lt;/div&gt;&lt;div class=&quot;line&quot;&gt;9&lt;/div&gt;&lt;div class=&quot;line&quot;&gt;10&lt;/div&gt;&lt;div class=&quot;line&quot;&gt;11&lt;/div&gt;&lt;div class=&quot;line&quot;&gt;12&lt;/div&gt;&lt;div class=&quot;line&quot;&gt;13&lt;/div&gt;&lt;div class=&quot;line&quot;&gt;14&lt;/div&gt;&lt;div class=&quot;line&quot;&gt;15&lt;/div&gt;&lt;div class=&quot;line&quot;&gt;16&lt;/div&gt;&lt;div class=&quot;line&quot;&gt;17&lt;/div&gt;&lt;div class=&quot;line&quot;&gt;18&lt;/div&gt;&lt;div class=&quot;line&quot;&gt;19&lt;/div&gt;&lt;div class=&quot;line&quot;&gt;20&lt;/div&gt;&lt;/pre&gt;&lt;/td&gt;&lt;td class=&quot;code&quot;&gt;&lt;pre&gt;&lt;div class=&quot;line&quot;&gt;public class RnTest extends ReactContextBaseJavaModule &amp;#123;&lt;/div&gt;&lt;div class=&quot;line&quot;&gt;  public RnTest(ReactApplicationContext reactContext) &amp;#123;&lt;/div&gt;&lt;div class=&quot;line&quot;&gt;    super(reactContext);&lt;/div&gt;&lt;div class=&quot;line&quot;&gt;  &amp;#125;&lt;/div&gt;&lt;div class=&quot;line&quot;&gt;&lt;/div&gt;&lt;div class=&quot;line&quot;&gt;  // ReactContextBaseJavaModule要求派生类实现getName方法。这个函数用于返回一个字符串&lt;/div&gt;&lt;div class=&quot;line&quot;&gt;  // 这个字符串用于在JavaScript端标记这个原生模块&lt;/div&gt;&lt;div class=&quot;line&quot;&gt;  @Override&lt;/div&gt;&lt;div class=&quot;line&quot;&gt;  public String getName() &amp;#123;&lt;/div&gt;&lt;div class=&quot;line&quot;&gt;    return &amp;quot;ToastByAndroid&amp;quot;;&lt;/div&gt;&lt;div class=&quot;line&quot;&gt;  &amp;#125;&lt;/div&gt;&lt;div class=&quot;line&quot;&gt;&lt;/div&gt;&lt;div class=&quot;line&quot;&gt;  // 获取应用包名&lt;/div&gt;&lt;div class=&quot;line&quot;&gt;  // 要导出一个方法给JavaScript使用，Java方法需要使用注解@ReactMethod&lt;/div&gt;&lt;div class=&quot;line&quot;&gt;   @ReactMethod&lt;/div&gt;&lt;div class=&quot;line&quot;&gt;   public void getPackageName() &amp;#123;&lt;/div&gt;&lt;div class=&quot;line&quot;&gt;     String name = getReactApplicationContext().getPackageName();&lt;/div&gt;&lt;div class=&quot;line&quot;&gt;     Toast.makeText(getReactApplicationContext(),name,Toast.LENGTH_LONG).show();&lt;/div&gt;&lt;div class=&quot;line&quot;&gt;    &amp;#125;&lt;/div&gt;&lt;div class=&quot;line&quot;&gt;&amp;#125;&lt;/div&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;&lt;/figure&gt;&lt;/p&gt;
+    
+    </summary>
+    
+    
+      <category term="ReactNative" scheme="http://zedongliu.github.io/tags/ReactNative/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>阿里巴巴初面总结反思</title>
+    <link href="http://zedongliu.github.io/2017/09/13/%E9%98%BF%E9%87%8C%E5%B7%B4%E5%B7%B4%E5%88%9D%E9%9D%A2%E6%80%BB%E7%BB%93%E5%8F%8D%E6%80%9D/"/>
+    <id>http://zedongliu.github.io/2017/09/13/阿里巴巴初面总结反思/</id>
+    <published>2017-09-13T06:57:24.000Z</published>
+    <updated>2017-09-13T08:15:26.891Z</updated>
+    
+    <content type="html"><![CDATA[<p>今天是阿里巴巴校招初面，怀着激动与万分忐忑的心情进入面试间后，首先面试官要求做一段段自我介绍，于是我便说了一下自己的基本情况，顺便提到了我有过实习和项目经历。做完自我介绍，面试官便直接让我介绍实习时做的项目，当时心灵里就是一喜，毕竟说自己的经历比回答各种技术问题要轻松得多，然而事实证明，我还是太年轻。</p>
+<p>进入正题：</p>
+<h2 id="React-Native调用原生"><a href="#React-Native调用原生" class="headerlink" title="React-Native调用原生"></a>React-Native调用原生</h2><blockquote>
+<ul>
+<li>问：介绍下实习做的项目</li>
+<li>答：对项目做了下简介，以及我在项目中的职责，</li>
+</ul>
+<ul>
+<li>问：说一下react native嵌入原生</li>
+<li>答：（脑子里一直回想当时做项目时是如何进行的，虽然有好多东西记不太清了，但是还是勉强说了出来。）</li>
+</ul>
+<ul>
+<li>问：如何反向调用</li>
+<li>答：（一脸懵逼）请面试官重复了一遍问题，然而还是不知所述。完全没弄懂问题是什么意思，而且也没有这方面的概念，没办法，只好老实交代没有遇到类似需求，不是很了解。<a id="more"></a>
+</li>
+</ul>
+</blockquote>
+<h2 id="进程与线程"><a href="#进程与线程" class="headerlink" title="进程与线程"></a>进程与线程</h2><p>大概面试官也觉得我说不出来什么东西了，就问了个Java基础问题：</p>
+<blockquote>
+<ul>
+<li>问：说一下进程与线程。</li>
+<li>答：….</li>
+</ul>
+<ul>
+<li>问：进程转换与线程转换，</li>
+<li>答：（无奈只能凭着感觉说了说）。</li>
+</ul>
+</blockquote>
+<h2 id="Android四大组件，进程启动Service"><a href="#Android四大组件，进程启动Service" class="headerlink" title="Android四大组件，进程启动Service"></a>Android四大组件，进程启动Service</h2><blockquote>
+<ul>
+<li>问：Android四大组件，</li>
+<li>答：……（这是Android开发最基本的问题了）</li>
+</ul>
+<ul>
+<li>问：如何在一个进程中启动Service</li>
+<li>答：又是凭感觉回答</li>
+</ul>
+</blockquote>
+<h2 id="自定义控件"><a href="#自定义控件" class="headerlink" title="自定义控件"></a>自定义控件</h2><blockquote>
+<ul>
+<li>问：知不知道如何自定义控件，有没有自定义控件过，如何使用自定义控件</li>
+<li>答：……</li>
+</ul>
+</blockquote>
+<h2 id="Fragment使用与生命周期"><a href="#Fragment使用与生命周期" class="headerlink" title="Fragment使用与生命周期"></a>Fragment使用与生命周期</h2><blockquote>
+<ul>
+<li>问：最近有没有读过Android方面的书或者有没有了解Android8.0的新特性,有设么东西可以分享一下的</li>
+<li>答：回答了刚好最近看到的Android碎片Fragment的应用，举了个新闻APP在平板和手机两种设备上不同显示界面的例子</li>
+</ul>
+<ul>
+<li>问：Fragment如何定义，如何使用</li>
+<li>答：……</li>
+</ul>
+<ul>
+<li>问：Fragment生命周期</li>
+<li>答：和Activity类似，有…（被打断）</li>
+</ul>
+<ul>
+<li>问：和Activity有什么区别的地方</li>
+<li>答：说了没有onRestart（）和onDestroy（）。<br>（其实onDestroy（）方法是有的）</li>
+</ul>
+</blockquote>
+<h2 id="提问"><a href="#提问" class="headerlink" title="提问"></a>提问</h2><blockquote>
+<ul>
+<li>问：你有什么问题吗</li>
+<li>答：您对我有什么看法或建议什么的吗？</li>
+</ul>
+<ul>
+<li>面试官：有些方面的点要深入，你可能大概知道他是什么，但是里面的细节的东西你可能就不是很清楚，这方面要注意…</li>
+</ul>
+</blockquote>
+<h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><p>面试暴露了很多问题，比如基础不扎实，还有面试官说的要全面深入了解，只知其一，不知其二。<br>另外最有感触的一点是，自己给自己挖的坑，自己要跳的出来。面试官很多问题实际是根据面试者的实际情况或经历来提问的，所以在介绍自己的情况的时候，应该提前想到可能要面对的提问，做到有恃无恐，搬起石头砸自己脚的事情还是不要做，这也从侧面反映了简历真实性的重要，因为即使是真实的经历也会让自己掉进坑里。</p>
+]]></content>
+    
+    <summary type="html">
+    
+      &lt;p&gt;今天是阿里巴巴校招初面，怀着激动与万分忐忑的心情进入面试间后，首先面试官要求做一段段自我介绍，于是我便说了一下自己的基本情况，顺便提到了我有过实习和项目经历。做完自我介绍，面试官便直接让我介绍实习时做的项目，当时心灵里就是一喜，毕竟说自己的经历比回答各种技术问题要轻松得多，然而事实证明，我还是太年轻。&lt;/p&gt;
+&lt;p&gt;进入正题：&lt;/p&gt;
+&lt;h2 id=&quot;React-Native调用原生&quot;&gt;&lt;a href=&quot;#React-Native调用原生&quot; class=&quot;headerlink&quot; title=&quot;React-Native调用原生&quot;&gt;&lt;/a&gt;React-Native调用原生&lt;/h2&gt;&lt;blockquote&gt;
+&lt;ul&gt;
+&lt;li&gt;问：介绍下实习做的项目&lt;/li&gt;
+&lt;li&gt;答：对项目做了下简介，以及我在项目中的职责，&lt;/li&gt;
+&lt;/ul&gt;
+&lt;ul&gt;
+&lt;li&gt;问：说一下react native嵌入原生&lt;/li&gt;
+&lt;li&gt;答：（脑子里一直回想当时做项目时是如何进行的，虽然有好多东西记不太清了，但是还是勉强说了出来。）&lt;/li&gt;
+&lt;/ul&gt;
+&lt;ul&gt;
+&lt;li&gt;问：如何反向调用&lt;/li&gt;
+&lt;li&gt;答：（一脸懵逼）请面试官重复了一遍问题，然而还是不知所述。完全没弄懂问题是什么意思，而且也没有这方面的概念，没办法，只好老实交代没有遇到类似需求，不是很了解。&lt;/li&gt;&lt;/ul&gt;&lt;/blockquote&gt;
+    
+    </summary>
+    
+    
+      <category term="记录" scheme="http://zedongliu.github.io/tags/%E8%AE%B0%E5%BD%95/"/>
+    
+  </entry>
+  
+  <entry>
     <title>Handler的运行机制</title>
-    <link href="106.14.169.113/2017/09/10/Handler%E7%9A%84%E8%BF%90%E8%A1%8C%E6%9C%BA%E5%88%B6/"/>
-    <id>106.14.169.113/2017/09/10/Handler的运行机制/</id>
+    <link href="http://zedongliu.github.io/2017/09/10/Handler%E7%9A%84%E8%BF%90%E8%A1%8C%E6%9C%BA%E5%88%B6/"/>
+    <id>http://zedongliu.github.io/2017/09/10/Handler的运行机制/</id>
     <published>2017-09-10T01:04:01.000Z</published>
     <updated>2017-09-10T01:51:34.767Z</updated>
     
@@ -49,14 +311,14 @@
     </summary>
     
     
-      <category term="Android" scheme="106.14.169.113/tags/Android/"/>
+      <category term="Android" scheme="http://zedongliu.github.io/tags/Android/"/>
     
   </entry>
   
   <entry>
     <title>Android数据保存之SharedPreference</title>
-    <link href="106.14.169.113/2017/09/09/Android%E6%95%B0%E6%8D%AE%E4%BF%9D%E5%AD%98%E4%B9%8BSharedPreference/"/>
-    <id>106.14.169.113/2017/09/09/Android数据保存之SharedPreference/</id>
+    <link href="http://zedongliu.github.io/2017/09/09/Android%E6%95%B0%E6%8D%AE%E4%BF%9D%E5%AD%98%E4%B9%8BSharedPreference/"/>
+    <id>http://zedongliu.github.io/2017/09/09/Android数据保存之SharedPreference/</id>
     <published>2017-09-09T01:55:42.000Z</published>
     <updated>2017-09-09T03:17:00.604Z</updated>
     
@@ -100,16 +362,16 @@
     </summary>
     
     
-      <category term="Android" scheme="106.14.169.113/tags/Android/"/>
+      <category term="Android" scheme="http://zedongliu.github.io/tags/Android/"/>
     
   </entry>
   
   <entry>
     <title>Android ListView数据内容不显示</title>
-    <link href="106.14.169.113/2017/09/06/Android-ListView%E6%95%B0%E6%8D%AE%E5%86%85%E5%AE%B9%E4%B8%8D%E6%98%BE%E7%A4%BA/"/>
-    <id>106.14.169.113/2017/09/06/Android-ListView数据内容不显示/</id>
+    <link href="http://zedongliu.github.io/2017/09/06/Android-ListView%E6%95%B0%E6%8D%AE%E5%86%85%E5%AE%B9%E4%B8%8D%E6%98%BE%E7%A4%BA/"/>
+    <id>http://zedongliu.github.io/2017/09/06/Android-ListView数据内容不显示/</id>
     <published>2017-09-06T06:33:41.000Z</published>
-    <updated>2017-09-10T01:48:26.532Z</updated>
+    <updated>2017-09-10T02:16:41.811Z</updated>
     
     <content type="html"><![CDATA[<h2 id="遇到的问题"><a href="#遇到的问题" class="headerlink" title="遇到的问题"></a>遇到的问题</h2><p>在城市列表布局文件里，添加了一个ListView组件，并在相应的Activity文件中添加了适配器，数据是从一个数据库文件city.db中获取城市名称cityName，保存到mArrayList变量中，然后显示到ListView列表中。代码截图如下<br><img src="/img/ListView.png" alt="ListView"><br><a id="more"></a><br><img src="/img/adapter.png" alt="adapter"><br>预期的结果应该是在城市列表界面显示出列表，然而，结果是这样的：<br><img src="/img/结果.png" alt="结果"><br>什么都没有！！</p>
 <h2 id="解决过程"><a href="#解决过程" class="headerlink" title="解决过程"></a>解决过程</h2><h3 id="检查代码"><a href="#检查代码" class="headerlink" title="检查代码"></a>检查代码</h3><p>我真的是掘地三尺的检查代码，然而真的没有发现什么问题，对照教程上的代码，也没有发现什么不同的地方。好吧，似乎此路不通，换个方法</p>
@@ -125,18 +387,18 @@
     </summary>
     
     
-      <category term="Android" scheme="106.14.169.113/tags/Android/"/>
+      <category term="Android" scheme="http://zedongliu.github.io/tags/Android/"/>
     
-      <category term="踩坑日志" scheme="106.14.169.113/tags/%E8%B8%A9%E5%9D%91%E6%97%A5%E5%BF%97/"/>
+      <category term="日常踩坑" scheme="http://zedongliu.github.io/tags/%E6%97%A5%E5%B8%B8%E8%B8%A9%E5%9D%91/"/>
     
   </entry>
   
   <entry>
     <title>创建Android项目：天气预报</title>
-    <link href="106.14.169.113/2017/09/05/%E5%88%9B%E5%BB%BAAndroid%E9%A1%B9%E7%9B%AE%EF%BC%9A%E5%A4%A9%E6%B0%94%E9%A2%84%E6%8A%A5/"/>
-    <id>106.14.169.113/2017/09/05/创建Android项目：天气预报/</id>
+    <link href="http://zedongliu.github.io/2017/09/05/%E5%88%9B%E5%BB%BAAndroid%E9%A1%B9%E7%9B%AE%EF%BC%9A%E5%A4%A9%E6%B0%94%E9%A2%84%E6%8A%A5/"/>
+    <id>http://zedongliu.github.io/2017/09/05/创建Android项目：天气预报/</id>
     <published>2017-09-05T02:09:53.000Z</published>
-    <updated>2017-09-10T01:48:20.102Z</updated>
+    <updated>2017-09-10T02:16:31.844Z</updated>
     
     <content type="html"><![CDATA[<p>暑假实习结束了，回到学校这两天总觉得无事可做，便想着创建个简单的Android项目来练练手，熟悉一下Android开发流程过程参考CSDN上一位大佬的<a href="http://blog.csdn.net/v_xchen_v/article/details/53688896" target="_blank" rel="external">博客教程</a></p>
 <p>然后很快就遇到了报错如下图，也是无奈<br><img src="/img/图片格式.png" alt="报错"></p>
@@ -150,19 +412,19 @@
     
     </summary>
     
-      <category term="Android项目" scheme="106.14.169.113/categories/Android%E9%A1%B9%E7%9B%AE/"/>
+      <category term="Android项目" scheme="http://zedongliu.github.io/categories/Android%E9%A1%B9%E7%9B%AE/"/>
     
     
-      <category term="Android" scheme="106.14.169.113/tags/Android/"/>
+      <category term="Android" scheme="http://zedongliu.github.io/tags/Android/"/>
     
-      <category term="踩坑日志" scheme="106.14.169.113/tags/%E8%B8%A9%E5%9D%91%E6%97%A5%E5%BF%97/"/>
+      <category term="日常踩坑" scheme="http://zedongliu.github.io/tags/%E6%97%A5%E5%B8%B8%E8%B8%A9%E5%9D%91/"/>
     
   </entry>
   
   <entry>
     <title>First Blog</title>
-    <link href="106.14.169.113/2017/08/27/first-blog/"/>
-    <id>106.14.169.113/2017/08/27/first-blog/</id>
+    <link href="http://zedongliu.github.io/2017/08/27/first-blog/"/>
+    <id>http://zedongliu.github.io/2017/08/27/first-blog/</id>
     <published>2017-08-27T12:37:07.000Z</published>
     <updated>2017-09-05T02:22:32.766Z</updated>
     
@@ -177,14 +439,14 @@
     </summary>
     
     
-      <category term="记录" scheme="106.14.169.113/tags/%E8%AE%B0%E5%BD%95/"/>
+      <category term="记录" scheme="http://zedongliu.github.io/tags/%E8%AE%B0%E5%BD%95/"/>
     
   </entry>
   
   <entry>
     <title>Hello World</title>
-    <link href="106.14.169.113/2017/08/27/hello-world/"/>
-    <id>106.14.169.113/2017/08/27/hello-world/</id>
+    <link href="http://zedongliu.github.io/2017/08/27/hello-world/"/>
+    <id>http://zedongliu.github.io/2017/08/27/hello-world/</id>
     <published>2017-08-27T12:07:07.548Z</published>
     <updated>2017-09-06T13:00:08.338Z</updated>
     

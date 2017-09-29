@@ -2,42 +2,77 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   
   <url>
-    <loc>106.14.169.113/2017/09/10/Handler%E7%9A%84%E8%BF%90%E8%A1%8C%E6%9C%BA%E5%88%B6/</loc>
+    <loc>http://zedongliu.github.io/2017/09/29/Android%E8%A7%A6%E6%91%B8%E4%BA%8B%E4%BB%B6%E4%BC%A0%E9%80%92/</loc>
+    
+    <lastmod>2017-09-29T01:07:30.673Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>http://zedongliu.github.io/2017/09/22/ContentProvider%E7%9A%84%E4%BD%BF%E7%94%A8/</loc>
+    
+    <lastmod>2017-09-22T03:37:31.748Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>http://zedongliu.github.io/2017/09/17/Android%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/</loc>
+    
+    <lastmod>2017-09-17T07:07:17.169Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>http://zedongliu.github.io/2017/09/14/ReactNative%E8%B0%83%E7%94%A8Android%E5%8E%9F%E7%94%9F%E6%96%B9%E6%B3%95/</loc>
+    
+    <lastmod>2017-09-13T11:49:57.329Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>http://zedongliu.github.io/2017/09/13/%E9%98%BF%E9%87%8C%E5%B7%B4%E5%B7%B4%E5%88%9D%E9%9D%A2%E6%80%BB%E7%BB%93%E5%8F%8D%E6%80%9D/</loc>
+    
+    <lastmod>2017-09-13T08:15:26.891Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>http://zedongliu.github.io/2017/09/06/Android-ListView%E6%95%B0%E6%8D%AE%E5%86%85%E5%AE%B9%E4%B8%8D%E6%98%BE%E7%A4%BA/</loc>
+    
+    <lastmod>2017-09-10T02:16:41.811Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>http://zedongliu.github.io/2017/09/05/%E5%88%9B%E5%BB%BAAndroid%E9%A1%B9%E7%9B%AE%EF%BC%9A%E5%A4%A9%E6%B0%94%E9%A2%84%E6%8A%A5/</loc>
+    
+    <lastmod>2017-09-10T02:16:31.844Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>http://zedongliu.github.io/2017/09/10/Handler%E7%9A%84%E8%BF%90%E8%A1%8C%E6%9C%BA%E5%88%B6/</loc>
     
     <lastmod>2017-09-10T01:51:34.767Z</lastmod>
     
   </url>
   
   <url>
-    <loc>106.14.169.113/2017/09/06/Android-ListView%E6%95%B0%E6%8D%AE%E5%86%85%E5%AE%B9%E4%B8%8D%E6%98%BE%E7%A4%BA/</loc>
-    
-    <lastmod>2017-09-10T01:48:26.532Z</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>106.14.169.113/2017/09/05/%E5%88%9B%E5%BB%BAAndroid%E9%A1%B9%E7%9B%AE%EF%BC%9A%E5%A4%A9%E6%B0%94%E9%A2%84%E6%8A%A5/</loc>
-    
-    <lastmod>2017-09-10T01:48:20.102Z</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>106.14.169.113/2017/09/09/Android%E6%95%B0%E6%8D%AE%E4%BF%9D%E5%AD%98%E4%B9%8BSharedPreference/</loc>
+    <loc>http://zedongliu.github.io/2017/09/09/Android%E6%95%B0%E6%8D%AE%E4%BF%9D%E5%AD%98%E4%B9%8BSharedPreference/</loc>
     
     <lastmod>2017-09-09T03:17:00.604Z</lastmod>
     
   </url>
   
   <url>
-    <loc>106.14.169.113/2017/08/27/hello-world/</loc>
+    <loc>http://zedongliu.github.io/2017/08/27/hello-world/</loc>
     
     <lastmod>2017-09-06T13:00:08.338Z</lastmod>
     
   </url>
   
   <url>
-    <loc>106.14.169.113/2017/08/27/first-blog/</loc>
+    <loc>http://zedongliu.github.io/2017/08/27/first-blog/</loc>
     
     <lastmod>2017-09-05T02:22:32.766Z</lastmod>
     

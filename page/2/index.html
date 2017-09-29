@@ -6,11 +6,11 @@
   <meta name="renderer" content="webkit">
   <meta http-equiv="X-UA-Compatible" content="IE=edge" >
   <link rel="dns-prefetch" href="http://zedongliu.github.io">
-  <title>Tag: Android | 谁没个年少轻狂</title>
+  <title>谁没个年少轻狂</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
   <meta property="og:type" content="website">
 <meta property="og:title" content="谁没个年少轻狂">
-<meta property="og:url" content="http://zedongliu.github.io/tags/Android/index.html">
+<meta property="og:url" content="http://zedongliu.github.io/page/2/index.html">
 <meta property="og:site_name" content="谁没个年少轻狂">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="谁没个年少轻狂">
@@ -153,110 +153,38 @@
           <div id="js-content" class="content-ll">
             
   
-  
+    <article id="post-Handler的运行机制" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+  <div class="article-inner">
     
-    
-      
-      
-      <section class="archives-wrap">
-        <div class="archive-year-wrap">
-          <a href="/archives/2017" class="archive-year">2017</a>
-        </div>
-        <div class="archives">
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      	<div class="article-meta">
-	      	<a href="/2017/09/22/ContentProvider的使用/" class="archive-article-date">
-  	<time datetime="2017-09-22T02:13:00.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2017-09-22</time>
-</a>
-        </div>
-    	 
+      <header class="article-header">
+        
   
     <h1 itemprop="name">
-      <a class="archive-article-title" href="/2017/09/22/ContentProvider的使用/">ContentProvider的使用</a>
+      <a class="article-title" href="/2017/09/10/Handler的运行机制/">Handler的运行机制</a>
     </h1>
   
 
-        <div class="article-info info-on-right">
-          
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color3">Android</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-          
-
-        </div>
-        <div class="clearfix"></div>
-    </header>
-  </div>
-</article>
-  
-    
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      	<div class="article-meta">
-	      	<a href="/2017/09/17/Android学习笔记/" class="archive-article-date">
-  	<time datetime="2017-09-17T06:54:56.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2017-09-17</time>
-</a>
-        </div>
-    	 
-  
-    <h1 itemprop="name">
-      <a class="archive-article-title" href="/2017/09/17/Android学习笔记/">Android学习笔记</a>
-    </h1>
-  
-
-        <div class="article-info info-on-right">
-          
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color3">Android</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-          
-
-        </div>
-        <div class="clearfix"></div>
-    </header>
-  </div>
-</article>
-  
-    
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      	<div class="article-meta">
-	      	<a href="/2017/09/10/Handler的运行机制/" class="archive-article-date">
+        
+        <a href="/2017/09/10/Handler的运行机制/" class="archive-article-date">
   	<time datetime="2017-09-10T01:04:01.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2017-09-10</time>
 </a>
-        </div>
-    	 
-  
-    <h1 itemprop="name">
-      <a class="archive-article-title" href="/2017/09/10/Handler的运行机制/">Handler的运行机制</a>
-    </h1>
-  
+        
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h2 id="Handler的作用"><a href="#Handler的作用" class="headerlink" title="Handler的作用"></a>Handler的作用</h2><p>当我们需要在子线程处理耗时的操作（例如访问网络，数据库的操作），而当耗时的操作完成后，需要更新UI，这就需要使用Handler来处理，因为子线程不能做更新UI的操作。Handler能帮我们很容易的把任务（在子线程处理）切换回它所在的线程。<br>简单理解，Handler就是解决线程和线程之间的通信的。主要接受子线程发送的数据， 并用此数据配合主线程更新UI。<br>由于Handler运行在主线程中(UI线程中)，  它与子线程可以通过Message对象来传递数据， 这个时候，Handler就承担着接受子线程传过来的(子线程用sedMessage()方法传弟)Message对象，(里面包含数据)  ， 把这些消息放入主线程队列中，配合主线程进行更新UI。</p>
+<h2 id="Handler的特点"><a href="#Handler的特点" class="headerlink" title="Handler的特点"></a>Handler的特点</h2><p>handler可以分发Message对象和Runnable对象到主线程中， 每个Handler实例，都会绑定到创建他的线程中(一般是位于主线程)，它有两个作用：<br>(1)安排消息或Runnable 在某个主线程中某个地方执行；<br>(2)安排一个动作在不同的线程中执行。<br></p>
+        
+          <a class="article-more-a" href="/2017/09/10/Handler的运行机制/#more">more >></a>
+        
+      
 
-        <div class="article-info info-on-right">
-          
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      
 	<div class="article-tag tagcloud">
 		<i class="icon-price-tags icon"></i>
 		<ul class="article-tag-list">
@@ -268,33 +196,73 @@
 		</ul>
 	</div>
 
-          
+      
 
-        </div>
-        <div class="clearfix"></div>
-    </header>
+      
+        <p class="article-more-link">
+          <a class="article-more-a" href="/2017/09/10/Handler的运行机制/">展开全文 >></a>
+        </p>
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
   </div>
 </article>
+
+<aside class="wrap-side-operation">
+    <div class="mod-side-operation">
+        
+        <div class="jump-container" id="js-jump-container" style="display:none;">
+            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
+                <i class="icon-font icon-back"></i>
+            </a>
+            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
+                <i class="icon-font icon-plane jump-plane"></i>
+            </div>
+        </div>
+        
+        
+    </div>
+</aside>
+
+
+
+
   
+    <article id="post-Android数据保存之SharedPreference" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+  <div class="article-inner">
     
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      	<div class="article-meta">
-	      	<a href="/2017/09/09/Android数据保存之SharedPreference/" class="archive-article-date">
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2017/09/09/Android数据保存之SharedPreference/">Android数据保存之SharedPreference</a>
+    </h1>
+  
+
+        
+        <a href="/2017/09/09/Android数据保存之SharedPreference/" class="archive-article-date">
   	<time datetime="2017-09-09T01:55:42.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2017-09-09</time>
 </a>
-        </div>
-    	 
-  
-    <h1 itemprop="name">
-      <a class="archive-article-title" href="/2017/09/09/Android数据保存之SharedPreference/">Android数据保存之SharedPreference</a>
-    </h1>
-  
+        
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>在天气预报这个项目中，几次遇到需要保存数据的地方。例如安装APP后首次启动时先进入几个连续的导航页面，还有再次进入APP时默认显示上一次查看的天气信息。这些需要保存的数据都是用SharedPreference来存储的，今天就来总结一下他的作用和用法</p>
+<h2 id="SharedPreference的作用"><a href="#SharedPreference的作用" class="headerlink" title="SharedPreference的作用"></a>SharedPreference的作用</h2><p>程序中处理的大部分问题都与数据有关，读取数据显示在UI上，读取的数据可以是本地的，也可以是网络的。保存用户数据到存储空间，可以是本地的数据库，文件等，也可以是保存到网络服务器。总之大部分的程序都是在和数据打交道。Android中数据保存比较方便灵活，今天就按照官网说说数据保存。</p>
+<p>大多数Android应用程序都需要存储数据，在Android生命周期方法onPause中，你可以保存用户在程序中的进度数据，在用户再次进入程序时进行读取恢复。可能一些应用程序不需要保存用户的进度信息，但是用户对于应用程序的设置信息一定要保存。很多应用需要保存大量的数据到数据库或者文件里，比如看电视的应用，需要保存大量的频道信息。下面就总结一下在Android中数据是如何保存的。</p>
+        
+          <a class="article-more-a" href="/2017/09/09/Android数据保存之SharedPreference/#more">more >></a>
+        
+      
 
-        <div class="article-info info-on-right">
-          
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      
 	<div class="article-tag tagcloud">
 		<i class="icon-price-tags icon"></i>
 		<ul class="article-tag-list">
@@ -306,33 +274,71 @@
 		</ul>
 	</div>
 
-          
+      
 
-        </div>
-        <div class="clearfix"></div>
-    </header>
+      
+        <p class="article-more-link">
+          <a class="article-more-a" href="/2017/09/09/Android数据保存之SharedPreference/">展开全文 >></a>
+        </p>
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
   </div>
 </article>
+
+<aside class="wrap-side-operation">
+    <div class="mod-side-operation">
+        
+        <div class="jump-container" id="js-jump-container" style="display:none;">
+            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
+                <i class="icon-font icon-back"></i>
+            </a>
+            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
+                <i class="icon-font icon-plane jump-plane"></i>
+            </div>
+        </div>
+        
+        
+    </div>
+</aside>
+
+
+
+
   
+    <article id="post-Android-ListView数据内容不显示" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+  <div class="article-inner">
     
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      	<div class="article-meta">
-	      	<a href="/2017/09/06/Android-ListView数据内容不显示/" class="archive-article-date">
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2017/09/06/Android-ListView数据内容不显示/">Android ListView数据内容不显示</a>
+    </h1>
+  
+
+        
+        <a href="/2017/09/06/Android-ListView数据内容不显示/" class="archive-article-date">
   	<time datetime="2017-09-06T06:33:41.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2017-09-06</time>
 </a>
-        </div>
-    	 
-  
-    <h1 itemprop="name">
-      <a class="archive-article-title" href="/2017/09/06/Android-ListView数据内容不显示/">Android ListView数据内容不显示</a>
-    </h1>
-  
+        
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h2 id="遇到的问题"><a href="#遇到的问题" class="headerlink" title="遇到的问题"></a>遇到的问题</h2><p>在城市列表布局文件里，添加了一个ListView组件，并在相应的Activity文件中添加了适配器，数据是从一个数据库文件city.db中获取城市名称cityName，保存到mArrayList变量中，然后显示到ListView列表中。代码截图如下<br><img src="/img/ListView.png" alt="ListView"><br></p>
+        
+          <a class="article-more-a" href="/2017/09/06/Android-ListView数据内容不显示/#more">more >></a>
+        
+      
 
-        <div class="article-info info-on-right">
-          
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      
 	<div class="article-tag tagcloud">
 		<i class="icon-price-tags icon"></i>
 		<ul class="article-tag-list">
@@ -348,33 +354,72 @@
 		</ul>
 	</div>
 
-          
+      
 
-        </div>
-        <div class="clearfix"></div>
-    </header>
+      
+        <p class="article-more-link">
+          <a class="article-more-a" href="/2017/09/06/Android-ListView数据内容不显示/">展开全文 >></a>
+        </p>
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
   </div>
 </article>
-  
-    
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      	<div class="article-meta">
-	      	<a href="/2017/09/05/创建Android项目：天气预报/" class="archive-article-date">
-  	<time datetime="2017-09-05T02:09:53.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2017-09-05</time>
-</a>
+
+<aside class="wrap-side-operation">
+    <div class="mod-side-operation">
+        
+        <div class="jump-container" id="js-jump-container" style="display:none;">
+            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
+                <i class="icon-font icon-back"></i>
+            </a>
+            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
+                <i class="icon-font icon-plane jump-plane"></i>
+            </div>
         </div>
-    	 
+        
+        
+    </div>
+</aside>
+
+
+
+
+  
+    <article id="post-创建Android项目：天气预报" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
   
     <h1 itemprop="name">
-      <a class="archive-article-title" href="/2017/09/05/创建Android项目：天气预报/">创建Android项目：天气预报</a>
+      <a class="article-title" href="/2017/09/05/创建Android项目：天气预报/">创建Android项目：天气预报</a>
     </h1>
   
 
-        <div class="article-info info-on-right">
-          
+        
+        <a href="/2017/09/05/创建Android项目：天气预报/" class="archive-article-date">
+  	<time datetime="2017-09-05T02:09:53.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2017-09-05</time>
+</a>
+        
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>暑假实习结束了，回到学校这两天总觉得无事可做，便想着创建个简单的Android项目来练练手，熟悉一下Android开发流程过程参考CSDN上一位大佬的<a href="http://blog.csdn.net/v_xchen_v/article/details/53688896" target="_blank" rel="external">博客教程</a></p>
+<p>然后很快就遇到了报错如下图，也是无奈<br><img src="/img/图片格式.png" alt="报错"></p>
+<p>自己搞不懂是什么意思，然后就百度了这是个什么原因导致。那么问题来了，到底错在哪了呢。原来是因为在设置组建的北京图片属性时，我用了一张原本是jpg格式的图片，然后我自己把后缀改成了.png，然后就报错了，于是我又重新找了一张png格式的图片换上去。运行，完美！</p>
+<p>一个小问题，记录一下！</p>
+
+      
+
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      
 	<div class="article-tag tagcloud">
 		<i class="icon-price-tags icon"></i>
 		<ul class="article-tag-list">
@@ -390,7 +435,7 @@
 		</ul>
 	</div>
 
-          
+      
 	<div class="article-category tagcloud">
 		<i class="icon-book icon"></i>
 		<ul class="article-tag-list">
@@ -403,17 +448,117 @@
 	</div>
 
 
-        </div>
-        <div class="clearfix"></div>
-    </header>
+      
+        <p class="article-more-link">
+          <a class="article-more-a" href="/2017/09/05/创建Android项目：天气预报/">展开全文 >></a>
+        </p>
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
   </div>
 </article>
+
+<aside class="wrap-side-operation">
+    <div class="mod-side-operation">
+        
+        <div class="jump-container" id="js-jump-container" style="display:none;">
+            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
+                <i class="icon-font icon-back"></i>
+            </a>
+            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
+                <i class="icon-font icon-plane jump-plane"></i>
+            </div>
+        </div>
+        
+        
+    </div>
+</aside>
+
+
+
+
   
+    <article id="post-first-blog" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
   
-    </div></section>
+    <h1 itemprop="name">
+      <a class="article-title" href="/2017/08/27/first-blog/">First Blog</a>
+    </h1>
   
 
+        
+        <a href="/2017/08/27/first-blog/" class="archive-article-date">
+  	<time datetime="2017-08-27T12:37:07.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2017-08-27</time>
+</a>
+        
+      </header>
     
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>这是我的第一篇文章，采用hexo+yilia搭建的博客</p>
+
+      
+
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      
+	<div class="article-tag tagcloud">
+		<i class="icon-price-tags icon"></i>
+		<ul class="article-tag-list">
+			 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color3">记录</a>
+        		</li>
+      		
+		</ul>
+	</div>
+
+      
+
+      
+        <p class="article-more-link">
+          <a class="article-more-a" href="/2017/08/27/first-blog/">展开全文 >></a>
+        </p>
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
+  </div>
+</article>
+
+<aside class="wrap-side-operation">
+    <div class="mod-side-operation">
+        
+        <div class="jump-container" id="js-jump-container" style="display:none;">
+            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
+                <i class="icon-font icon-back"></i>
+            </a>
+            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
+                <i class="icon-font icon-plane jump-plane"></i>
+            </div>
+        </div>
+        
+        
+    </div>
+</aside>
+
+
+
+
+  
+  
+    <nav id="page-nav">
+      <a class="extend prev" rel="prev" href="/">&laquo; Prev</a><a class="page-number" href="/">1</a><span class="page-number current">2</span><a class="page-number" href="/page/3/">3</a><a class="extend next" rel="next" href="/page/3/">Next &raquo;</a>
+    </nav>
+  
 
 
           </div>
@@ -435,10 +580,10 @@
     <script>
 	var yiliaConfig = {
 		mathjax: false,
-		isHome: false,
+		isHome: true,
 		isPost: false,
 		isArchive: false,
-		isTag: true,
+		isTag: false,
 		isCategory: false,
 		open_in_new: false,
 		toc_hide_index: true,
